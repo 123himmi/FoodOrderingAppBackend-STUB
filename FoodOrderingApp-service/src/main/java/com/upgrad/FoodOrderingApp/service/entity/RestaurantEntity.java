@@ -5,13 +5,17 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name="restaurant")
+@Table(name = "restaurant")
 @NamedQueries({
-        @NamedQuery(name = "getAllRestaurants", query = "select r from RestaurantEntity r")
+        @NamedQuery(name = "getAllRestaurants", query = "select r from RestaurantEntity r"),
+        @NamedQuery(name = "getRestaurantByRestaurantId", query = "select r from RestaurantEntity r where r.uuid = :restaurantId"),
+        @NamedQuery(name = "getRestaurantByName", query = "select r from RestaurantEntity r where lower(r.restaurantName) like lower(concat('%',:restaurantName,'%'))"),
+        @NamedQuery(name = "getRestaurantByCategoryId", query = "select r from RestaurantEntity r JOIN FETCH CategoryEntity c ON c.uuid = :categoryId")
 })
 
 public class RestaurantEntity implements Serializable {
@@ -52,11 +56,11 @@ public class RestaurantEntity implements Serializable {
 
     @ManyToMany
     @JoinTable(
-            name="restaurant_category",
-            joinColumns = @JoinColumn(name="restaurant_id"),
-            inverseJoinColumns = @JoinColumn(name="category_id")
+            name = "restaurant_category",
+            joinColumns = @JoinColumn(name = "restaurant_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    Set<CategoryEntity> categories;
+    Set<CategoryEntity> categories = new HashSet<>();
 
     public Integer getId() {
         return id;

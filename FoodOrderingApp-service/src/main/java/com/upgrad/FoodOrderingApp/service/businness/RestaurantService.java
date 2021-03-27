@@ -19,4 +19,18 @@ public class RestaurantService {
     public List<RestaurantEntity> getAllRestaurants() {
         return restaurantDao.getAllRestaurants();
     }
+
+    public List<RestaurantEntity> getRestaurantByName(String restaurantName) {
+        return restaurantDao.getRestaurantByName(restaurantName);
+    }
+
+    public List<RestaurantEntity> getRestaurantByRestaurantId(String restaurantId) {
+        return restaurantDao.getRestaurantByRestaurantId(restaurantId);
+    }
+
+    public List<RestaurantEntity> getRestaurantByCategoryId(String categoryId) {
+        return restaurantDao.getRestaurantByCategoryId(categoryId);
+    }
+
+
 }

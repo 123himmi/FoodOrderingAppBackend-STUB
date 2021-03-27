@@ -4,7 +4,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "category")
@@ -17,7 +19,6 @@ public class CategoryEntity implements Serializable {
     String id;
 
     @Column(name = "uuid")
-    @NotNull
     String uuid;
 
     @Column(name = "category_name")
@@ -32,8 +33,8 @@ public class CategoryEntity implements Serializable {
         this.id = id;
     }
 
-    public String getUuid() {
-        return uuid;
+    public UUID getUuid() {
+        return UUID.fromString(uuid);
     }
 
     public void setUuid(String uuid) {
@@ -49,7 +50,7 @@ public class CategoryEntity implements Serializable {
     }
 
     @ManyToMany(mappedBy = "categories")
-    Set<RestaurantEntity> restaurantCategories;
+    Set<RestaurantEntity> restaurantCategories = new HashSet<>();
 
     public Set<RestaurantEntity> getRestaurantCategories() {
         return restaurantCategories;
