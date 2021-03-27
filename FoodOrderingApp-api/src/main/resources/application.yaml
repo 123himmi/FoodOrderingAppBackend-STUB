@@ -1,6 +1,7 @@
 server:
+  port: 8081
   servlet:
-    port: 8080
+    port: 8081
     contextPath: /api
 
 spring:
@@ -12,11 +13,21 @@ spring:
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/restaurantdb
     username: postgres
-    password: Himanshi
+    password: password
 
   jpa:
     properties:
       hibernate:
         temp:
           use_jdbc_metadata_defaults: false
+        format_sql: true
+    show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+
+  logging:
+      level:
+          org:
+            hibernate:
+              type: trace
+
+
