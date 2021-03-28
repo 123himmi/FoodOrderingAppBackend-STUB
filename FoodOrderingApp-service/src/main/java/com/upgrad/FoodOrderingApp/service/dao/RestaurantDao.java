@@ -2,7 +2,9 @@ package com.upgrad.FoodOrderingApp.service.dao;
 
 import com.upgrad.FoodOrderingApp.service.entity.CategoryEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -34,9 +36,9 @@ public class RestaurantDao {
         }
     }
 
-    public List<RestaurantEntity> getRestaurantByRestaurantId(String restaurantId) {
+    public RestaurantEntity getRestaurantByRestaurantId(String restaurantId) {
         try {
-            return entityManager.createNamedQuery("getRestaurantByRestaurantId", RestaurantEntity.class).setParameter("restaurantId", restaurantId).getResultList();
+            return entityManager.createNamedQuery("getRestaurantByRestaurantId", RestaurantEntity.class).setParameter("restaurantId", restaurantId).getSingleResult();
         }
         catch(NoResultException noResultException) {
             return null;
@@ -51,4 +53,9 @@ public class RestaurantDao {
             return null;
         }
     }
+
+    @Transactional
+    public void updateRestaurantDetails(RestaurantEntity restaurantEntity) {
+            entityManager.merge(restaurantEntity);
+        }
 }

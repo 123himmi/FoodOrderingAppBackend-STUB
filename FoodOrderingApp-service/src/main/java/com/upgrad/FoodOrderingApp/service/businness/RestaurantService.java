@@ -3,6 +3,7 @@ package com.upgrad.FoodOrderingApp.service.businness;
 import com.upgrad.FoodOrderingApp.service.dao.RestaurantDao;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +25,16 @@ public class RestaurantService {
         return restaurantDao.getRestaurantByName(restaurantName);
     }
 
-    public List<RestaurantEntity> getRestaurantByRestaurantId(String restaurantId) {
+    public RestaurantEntity getRestaurantByRestaurantId(String restaurantId) {
         return restaurantDao.getRestaurantByRestaurantId(restaurantId);
     }
 
     public List<RestaurantEntity> getRestaurantByCategoryId(String categoryId) {
         return restaurantDao.getRestaurantByCategoryId(categoryId);
+    }
+
+    public void updateRestaurantDetails(RestaurantEntity restaurantEntity) {
+        restaurantDao.updateRestaurantDetails(restaurantEntity);
     }
 
 

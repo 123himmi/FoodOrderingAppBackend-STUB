@@ -36,7 +36,7 @@ public class RestaurantEntity implements Serializable {
     private String restaurantName;
 
     @Column(name = "photo_url")
-    @Size(max = 50)
+    @Size(max = 255)
     @NotNull
     private String photoUrl;
 

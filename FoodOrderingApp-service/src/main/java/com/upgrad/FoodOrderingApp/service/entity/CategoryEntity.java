@@ -10,6 +10,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "category")
+@NamedQueries({
+        @NamedQuery(name = "getAllCategories", query = "select c from CategoryEntity c"),
+        @NamedQuery(name = "getCategoryById", query = "select c from CategoryEntity c where c.uuid=:categoryId")
+})
 
 public class CategoryEntity implements Serializable {
 
