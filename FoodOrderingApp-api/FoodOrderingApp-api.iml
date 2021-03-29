@@ -19,7 +19,7 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
-          <factory-entry name="FoodOrderingApp-api" />
+          <factory-entry name="FoodOrderingApp-api" value="ef97b614-e24b-4e15-b103-a0cfa362f84d" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>
