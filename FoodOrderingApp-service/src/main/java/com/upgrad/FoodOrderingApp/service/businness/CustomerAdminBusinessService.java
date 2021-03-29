@@ -27,52 +27,53 @@ public class CustomerAdminBusinessService {
     public CustomerEntity getCustomerById(final Integer customerId) {
         return customerDao.getCustomerById(customerId);
     }
-@Transactional
-             public  CustomerEntity signup(CustomerEntity customerEntity) throws SignUpRestrictedException {
-// Regular expression for email format
-    String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." + "[a-zA-Z0-9_+&*-]+)*@" + "(?:[a-zA-Z0-9-]+\\.)+[a-z" + "A-Z]{2,7}$";
-    Pattern pattern = Pattern.compile(emailRegex);
-
-    // Throws SignUpRestrictedException if any field is empty except lastname
-    if (customerEntity.getFirstName() == null || customerEntity.getEmail() == null ||
-            customerEntity.getContactNumber() == null || customerEntity.getPassword() == null) {
-        throw new SignUpRestrictedException("SGR-005", "Except last name all fields should be filled");
-        // Throws SignUpRestrictedException for invalid email format
-    } else if (!pattern.matcher(customerEntity.getEmail()).matches()) {
-        throw new SignUpRestrictedException("SGR-002", "Invalid email-id format!");
-        // Throws SignUpRestrictedException if contactNumber is not numbers of length is not 10 digits
-    } else if(!customerEntity.getContactNumber().matches("[0-9]+") || customerEntity.getContactNumber().length() != 10) {
-        throw new SignUpRestrictedException("SGR-003", "Invalid contact number!");
-        // Throws SignUpRestrictedException if password length is less than 8 characters
-        // or if it does not contain at least one digit or if it does not contain at least one uppercase character
-        // or if it does not contain any of the mentioned special characters
-    } else if(customerEntity.getPassword().length() < 8
-            || !customerEntity.getPassword().matches(".*[0-9]{1,}.*")
-            || !customerEntity.getPassword().matches(".*[A-Z]{1,}.*")
-            || !customerEntity.getPassword().matches(".*[#@$%&*!^]{1,}.*")) {
-        throw new SignUpRestrictedException("SGR-004", "Weak password!");
-        // Throws SignUpRestrictedException if a customer with the same contact number is already registered
-    } else if (customerDao.getCustomerByContactNumber(customerEntity.getContactNumber()) != null) {
-        throw new SignUpRestrictedException("SGR-001", "This contact number is already registered! Try other contact number.");
-    }
-
-    // Encryption of password
-    String[] encryptedText = cryptographyProvider.encrypt(customerEntity.getPassword());
-    customerEntity.setSalt(encryptedText[0]);
-    customerEntity.setPassword(encryptedText[1]);
-
-    // Called customerDao to insert new customer record in the database
-    return customerDao.createCustomer(customerEntity);
-
-
-}
 
     @Transactional
-    public CustomerAuthEntity authenticate(final String contactNumber , final String password) throws AuthenticationFailedException {
+    public CustomerEntity signup(CustomerEntity customerEntity) throws SignUpRestrictedException {
+// Regular expression for email format
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." + "[a-zA-Z0-9_+&*-]+)*@" + "(?:[a-zA-Z0-9-]+\\.)+[a-z" + "A-Z]{2,7}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+
+        // Throws SignUpRestrictedException if any field is empty except lastname
+        if (customerEntity.getFirstName() == null || customerEntity.getEmail() == null ||
+                customerEntity.getContactNumber() == null || customerEntity.getPassword() == null) {
+            throw new SignUpRestrictedException("SGR-005", "Except last name all fields should be filled");
+            // Throws SignUpRestrictedException for invalid email format
+        } else if (!pattern.matcher(customerEntity.getEmail()).matches()) {
+            throw new SignUpRestrictedException("SGR-002", "Invalid email-id format!");
+            // Throws SignUpRestrictedException if contactNumber is not numbers of length is not 10 digits
+        } else if (!customerEntity.getContactNumber().matches("[0-9]+") || customerEntity.getContactNumber().length() != 10) {
+            throw new SignUpRestrictedException("SGR-003", "Invalid contact number!");
+            // Throws SignUpRestrictedException if password length is less than 8 characters
+            // or if it does not contain at least one digit or if it does not contain at least one uppercase character
+            // or if it does not contain any of the mentioned special characters
+        } else if (customerEntity.getPassword().length() < 8
+                || !customerEntity.getPassword().matches(".*[0-9]{1,}.*")
+                || !customerEntity.getPassword().matches(".*[A-Z]{1,}.*")
+                || !customerEntity.getPassword().matches(".*[#@$%&*!^]{1,}.*")) {
+            throw new SignUpRestrictedException("SGR-004", "Weak password!");
+            // Throws SignUpRestrictedException if a customer with the same contact number is already registered
+        } else if (customerDao.getCustomerByContactNumber(customerEntity.getContactNumber()) != null) {
+            throw new SignUpRestrictedException("SGR-001", "This contact number is already registered! Try other contact number.");
+        }
+
+        // Encryption of password
+        String[] encryptedText = cryptographyProvider.encrypt(customerEntity.getPassword());
+        customerEntity.setSalt(encryptedText[0]);
+        customerEntity.setPassword(encryptedText[1]);
+
+        // Called customerDao to insert new customer record in the database
+        return customerDao.createCustomer(customerEntity);
+
+
+    }
+
+    @Transactional
+    public CustomerAuthEntity authenticate(final String contactNumber, final String password) throws AuthenticationFailedException {
         //Call the getCustomerByContactNumber method in CustomerDao class for CustomerDao object and pass contactNumber as argument
         // Receive the value returned by getCustomerByContactNumber() method in CustomerEntity type object(name it as customerEntity)
         CustomerEntity customerEntity = customerDao.getCustomerByContactNumber(contactNumber);
-        if(customerEntity == null) {
+        if (customerEntity == null) {
             throw new AuthenticationFailedException("ATH-001", "This contact number has not been registered!");
         }
 
@@ -86,7 +87,7 @@ public class CustomerAdminBusinessService {
         //Now encryptedPassword contains the password entered by the customer in encrypted form
         //And customerEntity.getPassword() gives the password stored in the database in encrypted form
         //We compare both the passwords (Note that in this Assessment we are assuming that the credentials are correct)
-        if(encryptedPassword.equals(customerEntity.getPassword())) {
+        if (encryptedPassword.equals(customerEntity.getPassword())) {
             //Implementation of JwtTokenProvider class
             JwtTokenProvider jwtTokenProvider = new JwtTokenProvider(encryptedPassword);
             //Now CustomerAuthTokenEntity type object is to be persisted in a database
@@ -110,8 +111,7 @@ public class CustomerAdminBusinessService {
             customerDao.updateCustomer(customerEntity);
             return customerAuthTokenEntity;
 
-        }
-        else{
+        } else {
             //throw exception
             throw new AuthenticationFailedException("ATH-002", "Invalid Credentials");
         }
@@ -119,7 +119,7 @@ public class CustomerAdminBusinessService {
     }
 
     @Transactional
-    public CustomerEntity updateCustomer (CustomerEntity updatedCustomerEntity, final String authorizationToken)
+    public CustomerEntity updateCustomer(CustomerEntity updatedCustomerEntity, final String authorizationToken)
             throws AuthorizationFailedException, UpdateCustomerException {
 
         //get the customerAuthToken details from customerDao
@@ -129,7 +129,7 @@ public class CustomerAdminBusinessService {
         validateAccessToken(authorizationToken);
 
         //get the customer Details using the customerUuid
-        CustomerEntity customerEntity =  customerDao.getCustomerByUuid(customerAuthTokenEntity.getUuid());
+        CustomerEntity customerEntity = customerDao.getCustomerByUuid(customerAuthTokenEntity.getUuid());
 
         // Throws UpdateCustomerException if firstname is updated to null
         if (updatedCustomerEntity.getFirstName() == null) {
@@ -146,7 +146,7 @@ public class CustomerAdminBusinessService {
     }
 
     @Transactional
-    public CustomerEntity updateCustomerPassword (final String oldPassword, final String newPassword, final String authorizationToken)
+    public CustomerEntity updateCustomerPassword(final String oldPassword, final String newPassword, final String authorizationToken)
             throws AuthorizationFailedException, UpdateCustomerException {
 
         // Gets the current time
@@ -159,10 +159,10 @@ public class CustomerAdminBusinessService {
         validateAccessToken(authorizationToken);
 
         //get the customer Details using the customerUuid
-        CustomerEntity customerEntity =  customerDao.getCustomerByUuid(customerAuthTokenEntity.getUuid());
+        CustomerEntity customerEntity = customerDao.getCustomerByUuid(customerAuthTokenEntity.getUuid());
 
         // Throws UpdateCustomerException if either old password or new password is null
-        if (oldPassword == null || newPassword ==  null) {
+        if (oldPassword == null || newPassword == null) {
             throw new UpdateCustomerException("UCR-003", "No field should be empty");
         }
 
@@ -172,7 +172,7 @@ public class CustomerAdminBusinessService {
         final String encryptedPassword = cryptographyProvider.encrypt(oldPassword, customerEntity.getSalt());
 
         // Throws UpdateCustomerException if old password provided is incorrect
-        if(!encryptedPassword.equals(customerEntity.getPassword())) {
+        if (!encryptedPassword.equals(customerEntity.getPassword())) {
             throw new UpdateCustomerException("UCR-004", "Incorrect old password!");
             // Throws UpdateCustomerException if password length is less than 8 characters
             // or if it does not contain at least one digit or if it does not contain at least one uppercase character
@@ -198,7 +198,7 @@ public class CustomerAdminBusinessService {
     }
 
     @Transactional
-    public CustomerAuthEntity logout (final String authorizationToken) throws AuthorizationFailedException {
+    public CustomerAuthEntity logout(final String authorizationToken) throws AuthorizationFailedException {
 
         // Gets the customerAuthTokenEntity with the provided authorizationToken
         CustomerAuthEntity customerAuthTokenEntity = customerDao.getCustomerAuthToken(authorizationToken);
@@ -218,7 +218,7 @@ public class CustomerAdminBusinessService {
     }
 
     @Transactional
-    public void validateAccessToken(final String authorizationToken) throws AuthorizationFailedException{
+    public void validateAccessToken(final String authorizationToken) throws AuthorizationFailedException {
 
         //get the customerAuthToken details from customerDao
         CustomerAuthEntity customerAuthTokenEntity = customerDao.getCustomerAuthToken(authorizationToken);
@@ -233,7 +233,7 @@ public class CustomerAdminBusinessService {
         } else if (customerAuthTokenEntity.getLogoutAt() != null) {
             throw new AuthorizationFailedException("ATHR-002", "Customer is logged out. Log in again to access this endpoint.");
             // Throw AuthorizationFailedException if the customer session is expired
-        } else if (now.isAfter(customerAuthTokenEntity.getExpiresAt()) ) {
+        } else if (now.isAfter(customerAuthTokenEntity.getExpiresAt())) {
             throw new AuthorizationFailedException("ATHR-003", "Your session is expired. Log in again to access this endpoint.");
         }
 
@@ -244,6 +244,7 @@ public class CustomerAdminBusinessService {
         // Calls customerDao to get the access token of the customer from the database
         return customerDao.getCustomerAuthToken(accessToken);
     }
+
 
 }
 

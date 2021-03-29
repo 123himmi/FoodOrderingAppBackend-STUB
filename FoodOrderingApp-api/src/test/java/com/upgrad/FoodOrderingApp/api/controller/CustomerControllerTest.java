@@ -1,6 +1,7 @@
 //package com.upgrad.FoodOrderingApp.api.controller;
 //
-//import com.upgrad.FoodOrderingApp.service.businness.CustomerService;
+//import com.upgrad.FoodOrderingApp.service.businness.CustomerAdminBusinessService;
+////import com.upgrad.FoodOrderingApp.service.businness.CustomerService;
 //import com.upgrad.FoodOrderingApp.service.entity.CustomerAuthEntity;
 //import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
 //import com.upgrad.FoodOrderingApp.service.exception.AuthenticationFailedException;
@@ -36,7 +37,7 @@
 //    private MockMvc mockMvc;
 //
 //    @MockBean
-//    private CustomerService mockCustomerService;
+//    private CustomerAdminBusinessService mockCustomerService;
 //
 //    // ----------------------------- POST /customer/signup --------------------------------
 //

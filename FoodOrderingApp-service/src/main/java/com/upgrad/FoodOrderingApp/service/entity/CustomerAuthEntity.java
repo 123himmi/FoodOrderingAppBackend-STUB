@@ -1,25 +1,25 @@
 package com.upgrad.FoodOrderingApp.service.entity;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
-        import org.apache.commons.lang3.builder.HashCodeBuilder;
-        import org.apache.commons.lang3.builder.ToStringBuilder;
-        import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
-        import javax.persistence.*;
-        import javax.validation.constraints.NotNull;
-        import javax.validation.constraints.Size;
-        import java.io.Serializable;
-        import java.time.ZonedDateTime;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "customer_auth")
 @NamedQueries({
-        @NamedQuery(name = "customerAuthTokenByAccessToken" , query = "select ct from CustomerAuthEntity ct where ct.accessToken=:accessToken"),
-        @NamedQuery(name = "customerAuthTokenById" , query = "select ct from CustomerAuthEntity ct where ct.customer=:customer")
+        @NamedQuery(name = "customerAuthTokenByAccessToken", query = "select ct from CustomerAuthEntity ct where ct.accessToken=:accessToken"),
+        @NamedQuery(name = "customerAuthTokenById", query = "select ct from CustomerAuthEntity ct where ct.customer=:customer")
 })
 
 
-public class CustomerAuthEntity  implements Serializable {
+public class CustomerAuthEntity implements Serializable {
 
     @Id
     @Column(name = "ID")
