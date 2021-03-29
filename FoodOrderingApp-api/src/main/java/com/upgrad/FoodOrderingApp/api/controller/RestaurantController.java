@@ -60,11 +60,11 @@ public class RestaurantController {
             /*
             Adding rest of the attributes for restaurant list
              */
-            temp.setId(r.getUuid());
+            temp.setId(UUID.fromString(r.getUuid()));
             temp.setRestaurantName(r.getRestaurantName());
             temp.setAddress(tempAddress);
             temp.setAveragePrice(r.getAvgPriceForTwo());
-            temp.setCustomerRating(r.getCustomerRating());
+            temp.setCustomerRating(new BigDecimal(r.getCustomerRating()));
             temp.setPhotoURL(r.getPhotoUrl());
             temp.setNumberCustomersRated(r.getNumberOfCustomersRated());
             restaurantList.add(temp);
@@ -113,11 +113,11 @@ public class RestaurantController {
             /*
             Adding rest of the attributes for restaurant list
              */
-            temp.setId(r.getUuid());
+            temp.setId(UUID.fromString(r.getUuid()));
             temp.setRestaurantName(r.getRestaurantName());
             temp.setAddress(tempAddress);
             temp.setAveragePrice(r.getAvgPriceForTwo());
-            temp.setCustomerRating(r.getCustomerRating());
+            temp.setCustomerRating(new BigDecimal(r.getCustomerRating()));
             temp.setPhotoURL(r.getPhotoUrl());
             temp.setNumberCustomersRated(r.getNumberOfCustomersRated());
             restaurantList.add(temp);
@@ -171,11 +171,11 @@ public class RestaurantController {
             /*
             Adding rest of the attributes for restaurant list
              */
-            temp.setId(r.getUuid());
+            temp.setId(UUID.fromString(r.getUuid()));
             temp.setRestaurantName(r.getRestaurantName());
             temp.setAddress(tempAddress);
             temp.setAveragePrice(r.getAvgPriceForTwo());
-            temp.setCustomerRating(r.getCustomerRating());
+            temp.setCustomerRating(new BigDecimal(r.getCustomerRating()));
             temp.setPhotoURL(r.getPhotoUrl());
             temp.setNumberCustomersRated(r.getNumberOfCustomersRated());
             restaurantList.add(temp);
@@ -229,11 +229,11 @@ public class RestaurantController {
             /*
             Adding rest of the attributes for restaurant list
              */
-        temp.setId(restaurantEntity.getUuid());
+        temp.setId(UUID.fromString(restaurantEntity.getUuid()));
         temp.setRestaurantName(restaurantEntity.getRestaurantName());
         temp.setAddress(tempAddress);
         temp.setAveragePrice(restaurantEntity.getAvgPriceForTwo());
-        temp.setCustomerRating(restaurantEntity.getCustomerRating());
+        temp.setCustomerRating(new BigDecimal(restaurantEntity.getCustomerRating()));
         temp.setPhotoURL(restaurantEntity.getPhotoUrl());
         temp.setNumberCustomersRated(restaurantEntity.getNumberOfCustomersRated());
         restaurantList.add(temp);
@@ -267,13 +267,13 @@ public class RestaurantController {
            Add the new rating to this sum and divide by No Of Customers + 1
          */
         Integer tempNoOfCustomers = restaurantEntity.getNumberOfCustomersRated();
-        BigDecimal tempAvgRating = restaurantEntity.getCustomerRating();
-        BigDecimal newAvgRating = (tempAvgRating.multiply(new BigDecimal(tempNoOfCustomers)).add(tempAvgRating)).divide(new BigDecimal(tempNoOfCustomers+1));
+        Double tempAvgRating = restaurantEntity.getCustomerRating();
+        Double newAvgRating = (tempAvgRating*tempNoOfCustomers + tempAvgRating)/(tempNoOfCustomers+1);
         restaurantEntity.setCustomerRating(newAvgRating);
         restaurantEntity.setNumberOfCustomersRated(restaurantEntity.getNumberOfCustomersRated()+1);
-        restaurantService.updateRestaurantDetails(restaurantEntity);
+        RestaurantEntity updatedRestaurantEntity = restaurantService.updateRestaurantRating(restaurantEntity, newAvgRating.doubleValue());
         RestaurantUpdatedResponse restaurantListResponse = new RestaurantUpdatedResponse();
-        restaurantListResponse.setId(restaurantEntity.getUuid());
+        restaurantListResponse.setId(UUID.fromString(restaurantEntity.getUuid()));
 
         return new ResponseEntity<>(restaurantListResponse, HttpStatus.OK);
     }

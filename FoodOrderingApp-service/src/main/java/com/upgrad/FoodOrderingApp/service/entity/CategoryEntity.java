@@ -46,8 +46,12 @@ public class CategoryEntity implements Serializable {
         return id;
     }
 
-    public UUID getUuid() {
+    /*public UUID getUuid() {
         return UUID.fromString(uuid);
+    }*/
+
+    public String getUuid() {
+        return uuid;
     }
 
     public void setUuid(String uuid) {

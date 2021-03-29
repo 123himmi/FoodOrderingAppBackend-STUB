@@ -46,6 +46,7 @@ D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-api\targe
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-api\src\main\java\com\upgrad\FoodOrderingApp\api\controller\ItemController.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-api\target\generated-sources\.\com\upgrad\FoodOrderingApp\api\model\RestaurantListResponse.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-api\target\generated-sources\.\com\upgrad\FoodOrderingApp\api\model\SignupCustomerRequest.java
+D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-api\src\main\java\com\upgrad\FoodOrderingApp\api\controller\CustomerController.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-api\target\generated-sources\.\com\upgrad\FoodOrderingApp\api\model\ItemQuantityResponseItem.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-api\target\generated-sources\.\com\upgrad\FoodOrderingApp\api\model\ItemQuantity.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-api\target\generated-sources\.\com\upgrad\FoodOrderingApp\api\model\AddressListResponse.java

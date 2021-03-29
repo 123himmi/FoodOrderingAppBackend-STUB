@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping
@@ -34,7 +35,7 @@ public class CategoryController {
         for (CategoryEntity c : categoryEntities) {
             CategoryListResponse temp = new CategoryListResponse();
             temp.setCategoryName(c.getCategoryName());
-            temp.setId(c.getUuid());
+            temp.setId(UUID.fromString(c.getUuid()));
             categoryListResponses.add(temp);
         }
         CategoriesListResponse categoriesListResponse = new CategoriesListResponse();
@@ -67,7 +68,7 @@ public class CategoryController {
             temp.setItemName(i.getItemName());
             itemLists.add(temp);
         }
-        categoryDetailsResponse.setId(categoryEntity.getUuid());
+        categoryDetailsResponse.setId(UUID.fromString(categoryEntity.getUuid()));
         categoryDetailsResponse.setCategoryName(categoryEntity.getCategoryName());
         categoryDetailsResponse.setItemList(itemLists);
 

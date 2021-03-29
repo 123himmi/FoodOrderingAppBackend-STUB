@@ -42,6 +42,15 @@ public class AddressEntity implements Serializable {
     @JoinColumn(name = "state_id")
     private StateEntity state;
 
+    public AddressEntity(String uuid, String flatBuildingNumber, String locality, String city, String pincode, StateEntity state) {
+        this.uuid = uuid;
+        this.flatBuildingNumber = flatBuildingNumber;
+        this.locality = locality;
+        this.city = city;
+        this.pincode = pincode;
+        this.state = state;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -50,8 +59,8 @@ public class AddressEntity implements Serializable {
         this.id = id;
     }
 
-    public UUID getUuid() {
-        return UUID.fromString(uuid);
+    public String getUuid() {
+        return uuid;
     }
 
     public void setUuid(String uuid) {
