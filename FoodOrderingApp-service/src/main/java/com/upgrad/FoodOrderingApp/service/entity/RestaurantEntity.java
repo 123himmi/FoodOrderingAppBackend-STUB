@@ -15,7 +15,7 @@ import java.util.UUID;
         @NamedQuery(name = "getAllRestaurants", query = "select r from RestaurantEntity r"),
         @NamedQuery(name = "getRestaurantByRestaurantId", query = "select r from RestaurantEntity r where r.uuid = :restaurantId"),
         @NamedQuery(name = "getRestaurantByName", query = "select r from RestaurantEntity r where lower(r.restaurantName) like lower(concat('%',:restaurantName,'%'))"),
-        @NamedQuery(name = "getRestaurantByCategoryId", query = "select r from RestaurantEntity r JOIN FETCH CategoryEntity c ON c.uuid = :categoryId")
+        @NamedQuery(name = "getRestaurantByCategoryId", query = "select r from RestaurantEntity r LEFT JOIN FETCH r.categories c where c.uuid = :categoryId")
 })
 
 public class RestaurantEntity implements Serializable {

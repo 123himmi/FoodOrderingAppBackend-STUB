@@ -25,6 +25,7 @@ com\upgrad\FoodOrderingApp\service\ServiceConfiguration.class
 com\upgrad\FoodOrderingApp\service\common\GenericErrorCode.class
 com\upgrad\FoodOrderingApp\service\dao\RestaurantDao.class
 com\upgrad\FoodOrderingApp\service\exception\RestaurantNotFoundException.class
+com\upgrad\FoodOrderingApp\service\common\ItemType.class
 com\upgrad\FoodOrderingApp\service\exception\AddressNotFoundException.class
 com\upgrad\FoodOrderingApp\service\exception\InvalidRatingException.class
 com\upgrad\FoodOrderingApp\service\common\UnexpectedException.class

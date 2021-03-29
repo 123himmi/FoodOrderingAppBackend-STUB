@@ -21,16 +21,16 @@ public class RestaurantService {
         return restaurantDao.getAllRestaurants();
     }
 
-    public List<RestaurantEntity> getRestaurantByName(String restaurantName) {
-        return restaurantDao.getRestaurantByName(restaurantName);
+    public List<RestaurantEntity> restaurantsByName(String restaurantName) {
+        return restaurantDao.restaurantsByName(restaurantName);
     }
 
     public RestaurantEntity restaurantByUUID(String restaurantId) {
         return restaurantDao.restaurantByUUID(restaurantId);
     }
 
-    public List<RestaurantEntity> getRestaurantByCategoryId(String categoryId) {
-        return restaurantDao.getRestaurantByCategoryId(categoryId);
+    public List<RestaurantEntity> restaurantByCategory(String categoryId) {
+        return restaurantDao.restaurantByCategory(categoryId);
     }
 
     public void updateRestaurantDetails(RestaurantEntity restaurantEntity) {

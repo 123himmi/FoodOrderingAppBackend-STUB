@@ -1,5 +1,7 @@
 package com.upgrad.FoodOrderingApp.service.entity;
 
+import com.upgrad.FoodOrderingApp.service.common.ItemType;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -85,5 +87,9 @@ public class ItemEntity implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public void setType(ItemType enumType) {
+        this.type = enumType.toString();
     }
 }

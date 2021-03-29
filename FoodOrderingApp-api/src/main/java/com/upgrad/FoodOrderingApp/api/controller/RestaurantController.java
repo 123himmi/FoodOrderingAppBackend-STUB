@@ -76,13 +76,13 @@ public class RestaurantController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/restaurant/name/{restaurant_name}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<RestaurantListResponse> getRestaurantByName(@PathVariable(name = "restaurant_name") String restaurantName) throws RestaurantNotFoundException
+    public ResponseEntity<RestaurantListResponse> restaurantsByName(@PathVariable(name = "restaurant_name") String restaurantName) throws RestaurantNotFoundException
     {
         if(restaurantName.replace(" ", "").equals("")) {
             throw new RestaurantNotFoundException("RNF-003","Restaurant name field should not be empty");
         }
 
-        List<RestaurantEntity> restaurantEntityList = restaurantService.getRestaurantByName(restaurantName);
+        List<RestaurantEntity> restaurantEntityList = restaurantService.restaurantsByName(restaurantName);
         List<RestaurantList> restaurantList = new ArrayList<>();
         for (RestaurantEntity r : restaurantEntityList) {
             RestaurantList temp = new RestaurantList();
@@ -129,13 +129,13 @@ public class RestaurantController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/restaurant/category/{category_id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<RestaurantListResponse> getRestaurantByCategoryId(@PathVariable(name = "category_id") String categoryId) throws CategoryNotFoundException
+    public ResponseEntity<RestaurantListResponse> restaurantByCategory(@PathVariable(name = "category_id") String categoryId) throws CategoryNotFoundException
     {
         if(categoryId.replace(" ", "").equals("")) {
             throw new CategoryNotFoundException("CNF-001", "Category id field should not be empty");
         }
 
-        List<RestaurantEntity> restaurantEntityList = restaurantService.getRestaurantByCategoryId(categoryId);
+        List<RestaurantEntity> restaurantEntityList = restaurantService.restaurantByCategory(categoryId);
 
         if(restaurantEntityList == null) {
             throw new CategoryNotFoundException("CNF-002", "No category by this id");

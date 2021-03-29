@@ -5,13 +5,14 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(name = "category")
 @NamedQueries({
-        @NamedQuery(name = "getAllCategories", query = "select c from CategoryEntity c"),
+        @NamedQuery(name = "getAllCategories", query = "select c from CategoryEntity c order by c.categoryName"),
         @NamedQuery(name = "getCategoryById", query = "select c from CategoryEntity c where c.uuid=:categoryId")
 })
 
@@ -66,6 +67,10 @@ public class CategoryEntity implements Serializable {
 
     public void setItems(Set<ItemEntity> items) {
         this.items = items;
+    }
+
+    public void setItems(List<ItemEntity> items) {
+        this.items = new HashSet<>(items);
     }
 
     public Set<ItemEntity> getItems() {

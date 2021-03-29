@@ -26,9 +26,9 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/category", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<CategoriesListResponse> getAllCategories() {
+    public ResponseEntity<CategoriesListResponse> getAllCategoriesOrderedByName() {
 
-        List<CategoryEntity> categoryEntities = categoryService.getAllCategories();
+        List<CategoryEntity> categoryEntities = categoryService.getAllCategoriesOrderedByName();
         List<CategoryListResponse> categoryListResponses = new ArrayList<>();
 
         for (CategoryEntity c : categoryEntities) {
@@ -38,7 +38,7 @@ public class CategoryController {
             categoryListResponses.add(temp);
         }
         CategoriesListResponse categoriesListResponse = new CategoriesListResponse();
-        categoriesListResponse.setCategories(categoryListResponses);
+        categoriesListResponse.setCategories(categoryListResponses.size() > 0 ? categoryListResponses : null);
 
         return new ResponseEntity<>(categoriesListResponse, HttpStatus.OK);
     }
@@ -61,7 +61,8 @@ public class CategoryController {
         for(ItemEntity i : categoryEntity.getItems()) {
             ItemList temp = new ItemList();
             temp.setId(i.getUuid());
-            temp.setItemType(ItemList.ItemTypeEnum.values()[Integer.parseInt(i.getType())]);
+            Integer tempEnumIndex = i.getType().equals('0') ? 0 : 1;
+            temp.setItemType(ItemList.ItemTypeEnum.values()[tempEnumIndex]);
             temp.setPrice(i.getPrice());
             temp.setItemName(i.getItemName());
             itemLists.add(temp);
