@@ -28,11 +28,22 @@ public class ItemController {
     public ResponseEntity<ItemListResponse> getTopNItemsPerRestaurant(@PathVariable(name = "restaurant_id") String restaurantId) throws RestaurantNotFoundException {
 
         List<String> listOfItems = itemService.getTopNItemsForRestaurant(restaurantId);
-        for(String item : listOfItems) {
-            System.out.println("Printing values " + item);
+        System.out.println(listOfItems.size());
+
+        if(listOfItems == null) {
+            throw new RestaurantNotFoundException("RNF-001", "No restaurant by this id");
         }
         ItemListResponse itemListResponse = new ItemListResponse();
+        for(String item : listOfItems) {
+            System.out.println(item);
+            ItemEntity itemEntity = itemService.getItem(item);
+            ItemList listItem = new ItemList();
+            listItem.setId(itemEntity.getUuid());
+            listItem.setItemName(itemEntity.getItemName());
+            listItem.setPrice(itemEntity.getPrice());
+            listItem.setItemType(ItemList.ItemTypeEnum.fromValue(itemEntity.getType()));
+            itemListResponse.add(listItem);
+        }
         return new ResponseEntity<>(itemListResponse, HttpStatus.OK);
     }
-
 }

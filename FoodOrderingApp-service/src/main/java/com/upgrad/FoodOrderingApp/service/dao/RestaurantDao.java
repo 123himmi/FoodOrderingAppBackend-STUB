@@ -36,7 +36,7 @@ public class RestaurantDao {
         }
     }
 
-    public RestaurantEntity getRestaurantByRestaurantId(String restaurantId) {
+    public RestaurantEntity restaurantByUUID(String restaurantId) {
         try {
             return entityManager.createNamedQuery("getRestaurantByRestaurantId", RestaurantEntity.class).setParameter("restaurantId", restaurantId).getSingleResult();
         }

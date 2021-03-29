@@ -4,6 +4,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -15,24 +17,35 @@ import java.util.UUID;
 public class ItemEntity implements Serializable {
 
     @Id
-    @NotNull
     @Column(name = "ID")
-    Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @Column(name = "uuid")
     @NotNull
     @Size(max = 200)
-    String uuid;
+    private String uuid;
 
     @Column(name = "item_name")
     @Size(max = 30)
-    String itemName;
+    private String itemName;
 
     @Column(name = "price")
-    Integer price;
+    private Integer price;
 
     @Column(name = "type")
-    String type;
+    private String type;
+
+    @ManyToMany(mappedBy = "items")
+    private Set<CategoryEntity> itemCategories = new HashSet<>();
+
+    public Set<CategoryEntity> getItemCategories() {
+        return itemCategories;
+    }
+
+    public void setItemCategories(Set<CategoryEntity> itemCategories) {
+        this.itemCategories = itemCategories;
+    }
 
     public Integer getId() {
         return id;

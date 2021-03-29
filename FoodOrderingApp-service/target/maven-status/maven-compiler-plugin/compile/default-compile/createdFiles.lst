@@ -1,5 +1,6 @@
 com\upgrad\FoodOrderingApp\service\exception\CouponNotFoundException.class
 com\upgrad\FoodOrderingApp\service\exception\ItemNotFoundException.class
+com\upgrad\FoodOrderingApp\service\businness\ItemService.class
 com\upgrad\FoodOrderingApp\service\exception\AuthenticationFailedException.class
 com\upgrad\FoodOrderingApp\service\entity\AddressEntity.class
 com\upgrad\FoodOrderingApp\service\businness\PasswordCryptographyProvider.class
@@ -7,6 +8,7 @@ com\upgrad\FoodOrderingApp\service\dao\CategoryDao.class
 com\upgrad\FoodOrderingApp\service\businness\CategoryService.class
 com\upgrad\FoodOrderingApp\service\exception\PaymentMethodNotFoundException.class
 com\upgrad\FoodOrderingApp\service\exception\UpdateCustomerException.class
+com\upgrad\FoodOrderingApp\service\entity\ItemEntity.class
 com\upgrad\FoodOrderingApp\service\exception\SignUpRestrictedException.class
 com\upgrad\FoodOrderingApp\service\exception\SaveAddressException.class
 com\upgrad\FoodOrderingApp\service\exception\AuthorizationFailedException.class
@@ -14,6 +16,7 @@ com\upgrad\FoodOrderingApp\service\exception\CategoryNotFoundException.class
 com\upgrad\FoodOrderingApp\service\entity\CategoryEntity.class
 com\upgrad\FoodOrderingApp\service\entity\StateEntity.class
 com\upgrad\FoodOrderingApp\service\exception\CustomerNotFoundException.class
+com\upgrad\FoodOrderingApp\service\dao\ItemDao.class
 com\upgrad\FoodOrderingApp\service\businness\RestaurantService.class
 com\upgrad\FoodOrderingApp\service\entity\RestaurantEntity.class
 com\upgrad\FoodOrderingApp\service\businness\JwtTokenProvider.class

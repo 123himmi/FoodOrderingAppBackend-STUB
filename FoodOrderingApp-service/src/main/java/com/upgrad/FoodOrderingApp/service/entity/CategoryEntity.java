@@ -20,21 +20,29 @@ public class CategoryEntity implements Serializable {
     @Id
     @NotNull
     @Column(name = "ID")
-    String id;
+    private Integer id;
 
     @Column(name = "uuid")
-    String uuid;
+    private String uuid;
 
     @Column(name = "category_name")
     @Size(max = 255)
-    String categoryName;
+    private String categoryName;
 
-    public String getId() {
-        return id;
+    @ManyToMany
+    @JoinTable(
+            name = "category_item",
+            joinColumns = @JoinColumn(name = "category_id"),
+            inverseJoinColumns = @JoinColumn(name = "item_id")
+    )
+    private Set<ItemEntity> items = new HashSet<>();
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public Integer getId() {
+        return id;
     }
 
     public UUID getUuid() {
@@ -55,6 +63,14 @@ public class CategoryEntity implements Serializable {
 
     @ManyToMany(mappedBy = "categories")
     Set<RestaurantEntity> restaurantCategories = new HashSet<>();
+
+    public void setItems(Set<ItemEntity> items) {
+        this.items = items;
+    }
+
+    public Set<ItemEntity> getItems() {
+        return items;
+    }
 
     public Set<RestaurantEntity> getRestaurantCategories() {
         return restaurantCategories;

@@ -194,7 +194,7 @@ public class RestaurantController {
             throw new RestaurantNotFoundException("RNF-002", "Restaurant id field should not be empty");
         }
 
-        RestaurantEntity restaurantEntity = restaurantService.getRestaurantByRestaurantId(restaurantId);
+        RestaurantEntity restaurantEntity = restaurantService.restaurantByUUID(restaurantId);
 
         if(restaurantEntity == null) {
             throw new RestaurantNotFoundException("RNF-001", "No restaurant by this id");
@@ -256,7 +256,7 @@ public class RestaurantController {
             throw new InvalidRatingException("IRE-001", "Restaurant should be in the range of 1 to 5");
         }
 
-        RestaurantEntity restaurantEntity = restaurantService.getRestaurantByRestaurantId(restaurantId);
+        RestaurantEntity restaurantEntity = restaurantService.restaurantByUUID(restaurantId);
 
         if(restaurantEntity == null) {
             throw new RestaurantNotFoundException("RNF-001", "No restaurant by this id");
