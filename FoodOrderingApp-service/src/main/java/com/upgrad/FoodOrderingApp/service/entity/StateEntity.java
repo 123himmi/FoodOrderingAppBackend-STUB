@@ -39,8 +39,8 @@ public class StateEntity implements Serializable {
         this.id = id;
     }
 
-    public UUID getUuid() {
-        return UUID.fromString(uuid);
+    public String getUuid() {
+        return uuid;
     }
 
     public void setUuid(String uuid) {

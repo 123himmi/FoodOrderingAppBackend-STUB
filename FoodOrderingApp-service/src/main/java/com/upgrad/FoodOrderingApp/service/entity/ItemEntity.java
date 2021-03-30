@@ -13,7 +13,18 @@ import java.util.UUID;
 @Entity
 @Table(name = "item")
 @NamedQueries({
-        @NamedQuery(name = "getItem", query = "select i from ItemEntity i where i.uuid = :itemdId")
+        @NamedQuery(name = "getItem", query = "select i from ItemEntity i where i.uuid = :itemdId"),
+        @NamedQuery(name = "getItemsByCategory", query = "select i from CategoryEntity c " +
+                "JOIN CategoryItemEntity ci ON ci.id = c.id " +
+                "JOIN ItemEntity i ON i.id = ci.itemIdValue " +
+                "WHERE c.uuid = :categoryId"),
+        @NamedQuery(name = "getItemsByRestaurantAndCategory",
+                query = "select i from RestaurantEntity r " +
+                        "JOIN RestaurantCategoryEntity rc ON r.id = rc.restaurantIdValue " +
+                        "JOIN CategoryEntity c ON rc.categoryIdValue = c.id " +
+                        "JOIN CategoryItemEntity ci ON rc.categoryIdValue = ci.categoryIdValue " +
+                        "JOIN ItemEntity i ON ci.itemIdValue = i.id " +
+                        "where r.uuid = :restaurantId AND c.uuid = :categoryId")
 })
 
 public class ItemEntity implements Serializable {
@@ -38,16 +49,16 @@ public class ItemEntity implements Serializable {
     @Column(name = "type")
     private String type;
 
+    public Set<CategoryEntity> getRestaurantItems() {
+        return restaurantItems;
+    }
+
+    public void setRestaurantItems(Set<CategoryEntity> restaurantItems) {
+        this.restaurantItems = restaurantItems;
+    }
+
     @ManyToMany(mappedBy = "items")
-    private Set<CategoryEntity> itemCategories = new HashSet<>();
-
-    public Set<CategoryEntity> getItemCategories() {
-        return itemCategories;
-    }
-
-    public void setItemCategories(Set<CategoryEntity> itemCategories) {
-        this.itemCategories = itemCategories;
-    }
+    private Set<CategoryEntity> restaurantItems = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -57,8 +68,8 @@ public class ItemEntity implements Serializable {
         this.id = id;
     }
 
-    public UUID getUuid() {
-        return UUID.fromString(uuid);
+    public String getUuid() {
+        return uuid;
     }
 
     public void setUuid(String uuid) {

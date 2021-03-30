@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +25,13 @@ public class RestaurantService {
     private RestaurantDao restaurantDao;
 
     public List<RestaurantEntity> getAllRestaurants() {
-        return restaurantDao.getAllRestaurants();
+
+        return restaurantDao.getAllRestaurants().size() > 0 ? restaurantDao.getAllRestaurants() : null;
     }
 
-    public List<RestaurantEntity> restaurantsByRating() {return restaurantDao.getAllRestaurants();}
+    public List<RestaurantEntity> restaurantsByRating() {
+        return restaurantDao.getAllRestaurants().size() > 0 ? restaurantDao.getAllRestaurants() : null;
+    }
 
     public List<RestaurantEntity> restaurantsByName(String restaurantName) throws RestaurantNotFoundException {
         return restaurantDao.restaurantsByName(restaurantName);
@@ -41,7 +45,16 @@ public class RestaurantService {
         return restaurantDao.restaurantByCategory(categoryId);
     }
 
-    public RestaurantEntity updateRestaurantRating(RestaurantEntity restaurantEntity, Double newRating) throws InvalidRatingException {
+    public RestaurantEntity updateRestaurantRating(RestaurantEntity restaurantEntity, Double customerRating) throws InvalidRatingException {
+        if(customerRating < 1 || customerRating > 5) {
+            throw new InvalidRatingException("IRE-001", "Rating should be in the range of 1 to 5");
+        }
+        Integer tempNoOfCustomers = restaurantEntity.getNumberOfCustomersRated();
+        Double tempAvgRating = restaurantEntity.getCustomerRating();
+        Double newAvgRating = (tempAvgRating*tempNoOfCustomers + tempAvgRating)/(tempNoOfCustomers+1);
+        restaurantEntity.setCustomerRating(newAvgRating);
+        restaurantEntity.setNumberOfCustomersRated(restaurantEntity.getNumberOfCustomersRated()+1);
+
         restaurantDao.updateRestaurantDetails(restaurantEntity);
         return restaurantEntity;
     }
@@ -51,7 +64,7 @@ public class RestaurantService {
         List<CategoryEntity> listOfCategories = new ArrayList<>();
         for(CategoryEntity c : restaurantEntity.getCategories()) {
             CategoryEntity temp = new CategoryEntity();
-            temp.setUuid(c.getUuid().toString());
+            temp.setUuid(c.getUuid());
             temp.setCategoryName(c.getCategoryName());
             listOfCategories.add(temp);
         }

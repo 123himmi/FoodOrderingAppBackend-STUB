@@ -40,9 +40,9 @@ public class CategoryService {
     public List<ItemEntity> getItemsByCategoryAndRestaurant(String categoryId) {
          CategoryEntity categoryEntity = categoryDao.getItemsByCategoryAndRestaurant(categoryId);
          List<ItemEntity> itemEntities = new ArrayList<>();
-         for(ItemEntity i : categoryEntity.getItems()) {
+        /* for(ItemEntity i : categoryEntity.getItems()) {
              itemEntities.add(i);
-         }
+         }*/
          return itemEntities;
     }
 }

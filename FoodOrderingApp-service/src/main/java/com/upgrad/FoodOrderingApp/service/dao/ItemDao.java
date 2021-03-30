@@ -31,5 +31,18 @@ public class ItemDao {
     public ItemEntity getItem(String itemId) {
         return entityManager.createQuery("getItem", ItemEntity.class).getSingleResult();
     }
+
+    public List<ItemEntity> getItemsByCategoryAndRestaurant(String restaurantId, String categoryId) {
+        return entityManager.createQuery("getItemsByRestaurantAndCategory", ItemEntity.class)
+                .setParameter("restaurantId", restaurantId)
+                .setParameter("categoryId", categoryId)
+                .getResultList();
+    }
+
+    public List<ItemEntity> getItemsByCategory(String categoryId) {
+        return entityManager.createQuery("getItemsByCategory", ItemEntity.class)
+                .setParameter("categoryId", categoryId)
+                .getResultList();
+    }
 }
 

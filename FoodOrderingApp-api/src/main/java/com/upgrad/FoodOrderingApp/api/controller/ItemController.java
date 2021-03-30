@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping
@@ -38,7 +39,7 @@ public class ItemController {
             System.out.println(item);
             ItemEntity itemEntity = itemService.getItem(item);
             ItemList listItem = new ItemList();
-            listItem.setId(itemEntity.getUuid());
+            listItem.setId(UUID.fromString(itemEntity.getUuid()));
             listItem.setItemName(itemEntity.getItemName());
             listItem.setPrice(itemEntity.getPrice());
             listItem.setItemType(ItemList.ItemTypeEnum.fromValue(itemEntity.getType()));
