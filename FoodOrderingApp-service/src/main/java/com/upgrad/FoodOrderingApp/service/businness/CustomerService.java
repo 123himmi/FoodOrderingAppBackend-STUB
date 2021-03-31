@@ -13,6 +13,14 @@ public class CustomerService {
     private CustomerDao customerDao;
 
     public CustomerEntity getCustomer(String accessToken) throws AuthorizationFailedException {
-        return customerDao.getCustomerById(customerDao.getCustomerAuthToken(accessToken).getCustomer().getId());
+        if(customerDao.getCustomerAuthToken(accessToken) == null) {
+            throw new AuthorizationFailedException("ATHR-003", "Your session is expired. Log in again to access this endpoint");
+        }
+
+        CustomerEntity customerEntity = customerDao.getCustomerById(customerDao.getCustomerAuthToken(accessToken).getCustomer().getId());
+        if(customerEntity == null) {
+            throw new AuthorizationFailedException("ATHR-001", "Customer is not Logged in");
+        }
+        return customerEntity;
     }
 }

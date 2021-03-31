@@ -41,202 +41,64 @@ public class RestaurantController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/restaurant", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantListResponse> getAllRestaurants() throws RestaurantNotFoundException {
-
         List<RestaurantEntity> restaurantEntityList = restaurantService.restaurantsByRating();
-        List<RestaurantList> restaurantList = new ArrayList<>();
-        for (RestaurantEntity r : restaurantEntityList) {
-            RestaurantList temp = new RestaurantList();
-            /*
-            Adding address per restaurant list
-             */
-            RestaurantDetailsResponseAddress tempAddress = new RestaurantDetailsResponseAddress();
-            tempAddress.setCity(r.getAddress().getCity());
-            tempAddress.setFlatBuildingName(r.getAddress().getFlatBuildingNumber());
-            tempAddress.setId(UUID.fromString(r.getAddress().getUuid()));
-            tempAddress.setLocality(r.getAddress().getLocality());
-            tempAddress.setPincode(r.getAddress().getPincode());
-            /*
-            Adding state per address per restaurant list
-            */
-            RestaurantDetailsResponseAddressState tempState = new RestaurantDetailsResponseAddressState();
-            tempState.setId(UUID.fromString(r.getAddress().getState().getUuid()));
-            tempState.setStateName(r.getAddress().getState().getStateName());
-            tempAddress.setState(tempState);
-            /*
-            Adding categories per address to the restaurant list
-             */
-            StringJoiner tempCategories = new StringJoiner(", ");
-            for (CategoryEntity c : categoryService.getCategoriesByRestaurant(r.getUuid())) {
-                tempCategories.add(c.getCategoryName().toString());
-            }
-            temp.setCategories(tempCategories.toString());
-            /*
-            Adding rest of the attributes for restaurant list
-             */
-            temp.setId(UUID.fromString(r.getUuid()));
-            temp.setRestaurantName(r.getRestaurantName());
-            temp.setAddress(tempAddress);
-            temp.setAveragePrice(r.getAvgPriceForTwo());
-            temp.setCustomerRating(new BigDecimal(r.getCustomerRating()));
-            temp.setPhotoURL(r.getPhotoUrl());
-            temp.setNumberCustomersRated(r.getNumberOfCustomersRated());
-            restaurantList.add(temp);
-        }
+        List<RestaurantList> restaurantLists = formRestaurantList(restaurantEntityList);
         RestaurantListResponse restaurantListResponse = new RestaurantListResponse();
-        restaurantListResponse.setRestaurants(restaurantList);
-
+        restaurantListResponse.setRestaurants(restaurantLists);
         return new ResponseEntity<>(restaurantListResponse, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/restaurant/name/{restaurant_name}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<RestaurantListResponse> restaurantsByName(@PathVariable(name = "restaurant_name") String restaurantName) throws RestaurantNotFoundException
-    {
-        if(restaurantName.replace(" ", "").equals("")) {
-            throw new RestaurantNotFoundException("RNF-003","Restaurant name field should not be empty");
+    public ResponseEntity<RestaurantListResponse> restaurantsByName(@PathVariable(name = "restaurant_name") String restaurantName) throws RestaurantNotFoundException {
+        if (restaurantName.replace(" ", "").equals("")) {
+            throw new RestaurantNotFoundException("RNF-003", "Restaurant name field should not be empty");
         }
 
         List<RestaurantEntity> restaurantEntityList = restaurantService.restaurantsByName(restaurantName);
-        List<RestaurantList> restaurantList = new ArrayList<>();
-        for (RestaurantEntity r : restaurantEntityList) {
-            RestaurantList temp = new RestaurantList();
-            /*
-            Adding address per restaurant list
-             */
-            RestaurantDetailsResponseAddress tempAddress = new RestaurantDetailsResponseAddress();
-            tempAddress.setCity(r.getAddress().getCity());
-            tempAddress.setFlatBuildingName(r.getAddress().getFlatBuildingNumber());
-            tempAddress.setId(UUID.fromString(r.getAddress().getUuid()));
-            tempAddress.setLocality(r.getAddress().getLocality());
-            tempAddress.setPincode(r.getAddress().getPincode());
-            /*
-            Adding state per address per restaurant list
-            */
-            RestaurantDetailsResponseAddressState tempState = new RestaurantDetailsResponseAddressState();
-            tempState.setId(UUID.fromString(r.getAddress().getState().getUuid()));
-            tempState.setStateName(r.getAddress().getState().getStateName());
-            tempAddress.setState(tempState);
-            /*
-            Adding categories per address to the restaurant list
-             */
-            StringJoiner tempCategories = new StringJoiner(", ");
-            for (CategoryEntity c : categoryService.getCategoriesByRestaurant(r.getUuid())) {
-                tempCategories.add(c.getCategoryName().toString());
-            }
-            temp.setCategories(tempCategories.toString());
-            /*
-            Adding rest of the attributes for restaurant list
-             */
-            temp.setId(UUID.fromString(r.getUuid()));
-            temp.setRestaurantName(r.getRestaurantName());
-            temp.setAddress(tempAddress);
-            temp.setAveragePrice(r.getAvgPriceForTwo());
-            temp.setCustomerRating(new BigDecimal(r.getCustomerRating()));
-            temp.setPhotoURL(r.getPhotoUrl());
-            temp.setNumberCustomersRated(r.getNumberOfCustomersRated());
-            restaurantList.add(temp);
-        }
+        List<RestaurantList> restaurantLists = formRestaurantList(restaurantEntityList);
         RestaurantListResponse restaurantListResponse = new RestaurantListResponse();
-        restaurantListResponse.setRestaurants(restaurantList);
-
+        restaurantListResponse.setRestaurants(restaurantLists);
         return new ResponseEntity<>(restaurantListResponse, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/restaurant/category/{category_id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantListResponse> restaurantByCategory(@PathVariable(name = "category_id") String categoryId) throws CategoryNotFoundException, RestaurantNotFoundException {
-        if(categoryId.replace(" ", "").equals("")) {
+        if (categoryId.replace(" ", "").equals("")) {
             throw new CategoryNotFoundException("CNF-001", "Category id field should not be empty");
         }
 
         List<RestaurantEntity> restaurantEntityList = restaurantService.restaurantByCategory(categoryId);
 
-        if(restaurantEntityList == null) {
+        if (restaurantEntityList == null) {
             throw new CategoryNotFoundException("CNF-002", "No category by this id");
         }
 
-        List<RestaurantList> restaurantList = new ArrayList<>();
-        for (RestaurantEntity r : restaurantEntityList) {
-            RestaurantList temp = new RestaurantList();
-            /*
-            Adding address per restaurant list
-             */
-            RestaurantDetailsResponseAddress tempAddress = new RestaurantDetailsResponseAddress();
-            tempAddress.setCity(r.getAddress().getCity());
-            tempAddress.setFlatBuildingName(r.getAddress().getFlatBuildingNumber());
-            tempAddress.setId(UUID.fromString(r.getAddress().getUuid()));
-            tempAddress.setLocality(r.getAddress().getLocality());
-            tempAddress.setPincode(r.getAddress().getPincode());
-            /*
-            Adding state per address per restaurant list
-            */
-            RestaurantDetailsResponseAddressState tempState = new RestaurantDetailsResponseAddressState();
-            tempState.setId(UUID.fromString(r.getAddress().getState().getUuid()));
-            tempState.setStateName(r.getAddress().getState().getStateName());
-            tempAddress.setState(tempState);
-            /*
-            Adding categories per address to the restaurant list
-             */
-            StringJoiner tempCategories = new StringJoiner(", ");
-            for (CategoryEntity c : categoryService.getCategoriesByRestaurant(r.getUuid())) {
-                tempCategories.add(c.getCategoryName().toString());
-            }
-            temp.setCategories(tempCategories.toString());
-            /*
-            Adding rest of the attributes for restaurant list
-             */
-            temp.setId(UUID.fromString(r.getUuid()));
-            temp.setRestaurantName(r.getRestaurantName());
-            temp.setAddress(tempAddress);
-            temp.setAveragePrice(r.getAvgPriceForTwo());
-            temp.setCustomerRating(new BigDecimal(r.getCustomerRating()));
-            temp.setPhotoURL(r.getPhotoUrl());
-            temp.setNumberCustomersRated(r.getNumberOfCustomersRated());
-            restaurantList.add(temp);
-        }
+        List<RestaurantList> restaurantLists = formRestaurantList(restaurantEntityList);
         RestaurantListResponse restaurantListResponse = new RestaurantListResponse();
-        restaurantListResponse.setRestaurants(restaurantList);
-
+        restaurantListResponse.setRestaurants(restaurantLists);
         return new ResponseEntity<>(restaurantListResponse, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/restaurant/{restaurant_id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantDetailsResponse> getRestaurantByRestaurantId(@PathVariable(name = "restaurant_id") String restaurantId) throws RestaurantNotFoundException, CategoryNotFoundException {
 
-        if(restaurantId.replace(" ", "").equals("")) {
+        if (restaurantId.replace(" ", "").equals("")) {
             throw new RestaurantNotFoundException("RNF-002", "Restaurant id field should not be empty");
         }
 
         RestaurantEntity restaurantEntity = restaurantService.restaurantByUUID(restaurantId);
 
-        if(restaurantEntity == null) {
+        if (restaurantEntity == null) {
             throw new RestaurantNotFoundException("RNF-001", "No restaurant by this id");
         }
 
         RestaurantDetailsResponse restaurantDetailsResponse = new RestaurantDetailsResponse();
-            /*
-            Adding address per restaurant list
-             */
-        RestaurantDetailsResponseAddress tempAddress = new RestaurantDetailsResponseAddress();
-        tempAddress.setCity(restaurantEntity.getAddress().getCity());
-        tempAddress.setFlatBuildingName(restaurantEntity.getAddress().getFlatBuildingNumber());
-        tempAddress.setId(UUID.fromString(restaurantEntity.getAddress().getUuid()));
-        tempAddress.setLocality(restaurantEntity.getAddress().getLocality());
-        tempAddress.setPincode(restaurantEntity.getAddress().getPincode());
-            /*
-            Adding state per address per restaurant list
-            */
-        RestaurantDetailsResponseAddressState tempState = new RestaurantDetailsResponseAddressState();
-        tempState.setId(UUID.fromString(restaurantEntity.getAddress().getState().getUuid()));
-        tempState.setStateName(restaurantEntity.getAddress().getState().getStateName());
-        tempAddress.setState(tempState);
-            /*
-            Adding categories per address to the restaurant list
-             */
         List<CategoryList> categoryLists = new ArrayList<>();
 
         for (CategoryEntity c : categoryService.getCategoriesByRestaurant(restaurantId)) {
             CategoryList categoryList = new CategoryList();
             List<ItemList> itemLists = new ArrayList<>();
-            for(ItemEntity i : itemService.getItemsByCategoryAndRestaurant(restaurantId, c.getUuid())) {
+            for (ItemEntity i : itemService.getItemsByCategoryAndRestaurant(restaurantId, c.getUuid())) {
                 ItemList itemList = new ItemList();
                 itemList.setItemName(i.getItemName());
                 itemList.setPrice(i.getPrice());
@@ -257,7 +119,7 @@ public class RestaurantController {
              */
         restaurantDetailsResponse.setId(UUID.fromString(restaurantEntity.getUuid()));
         restaurantDetailsResponse.setRestaurantName(restaurantEntity.getRestaurantName());
-        restaurantDetailsResponse.setAddress(tempAddress);
+        restaurantDetailsResponse.setAddress(formAddressResponse(restaurantEntity));
         restaurantDetailsResponse.setAveragePrice(restaurantEntity.getAvgPriceForTwo());
         restaurantDetailsResponse.setCustomerRating(new BigDecimal(restaurantEntity.getCustomerRating()));
         restaurantDetailsResponse.setPhotoURL(restaurantEntity.getPhotoUrl());
@@ -270,22 +132,21 @@ public class RestaurantController {
     public ResponseEntity<RestaurantUpdatedResponse> updateRestaurantDetails(@PathVariable(name = "restaurant_id") final String restaurantId,
                                                                              @RequestParam(name = "customer_rating") final Double customerRating,
                                                                              @RequestHeader("authorization") final String authorization
-                                                                            )
-            throws AuthorizationFailedException, RestaurantNotFoundException, InvalidRatingException
-    {
+    )
+            throws AuthorizationFailedException, RestaurantNotFoundException, InvalidRatingException {
         String[] bearerToken = authorization.split("Bearer ");
 
-        if(customerService.getCustomer(bearerToken[1]) == null) {
+        if (customerService.getCustomer(bearerToken[1]) == null) {
             throw new AuthorizationFailedException("ATHR-001", "Customer is not Logged in");
         }
 
-        if(restaurantId.replace(" ", "").equals("")) {
+        if (restaurantId.replace(" ", "").equals("")) {
             throw new RestaurantNotFoundException("RNF-002", "Restaurant id field should not be empty");
         }
 
         RestaurantEntity restaurantEntity = restaurantService.restaurantByUUID(restaurantId);
 
-        if(restaurantEntity == null) {
+        if (restaurantEntity == null) {
             throw new RestaurantNotFoundException("RNF-001", "No restaurant by this id");
         }
         restaurantService.updateRestaurantRating(restaurantEntity, customerRating);
@@ -293,5 +154,49 @@ public class RestaurantController {
         restaurantListResponse.setId(UUID.fromString(restaurantId));
         restaurantListResponse.setStatus("RESTAURANT RATING UPDATED SUCCESSFULLY");
         return new ResponseEntity<>(restaurantListResponse, HttpStatus.OK);
+    }
+
+    RestaurantDetailsResponseAddress formAddressResponse(RestaurantEntity restaurantEntity) {
+        RestaurantDetailsResponseAddress restaurantDetailsResponseAddress = new RestaurantDetailsResponseAddress();
+        restaurantDetailsResponseAddress.setCity(restaurantEntity.getAddress().getCity());
+        restaurantDetailsResponseAddress.setFlatBuildingName(restaurantEntity.getAddress().getFlatBuildingNumber());
+        restaurantDetailsResponseAddress.setId(UUID.fromString(restaurantEntity.getAddress().getUuid()));
+        restaurantDetailsResponseAddress.setLocality(restaurantEntity.getAddress().getLocality());
+        restaurantDetailsResponseAddress.setPincode(restaurantEntity.getAddress().getPincode());
+            /*
+            Adding state per address per restaurant list
+            */
+        RestaurantDetailsResponseAddressState restaurantDetailsResponseAddressState = new RestaurantDetailsResponseAddressState();
+        restaurantDetailsResponseAddressState.setId(UUID.fromString(restaurantEntity.getAddress().getState().getUuid()));
+        restaurantDetailsResponseAddressState.setStateName(restaurantEntity.getAddress().getState().getStateName());
+        restaurantDetailsResponseAddress.setState(restaurantDetailsResponseAddressState);
+        return restaurantDetailsResponseAddress;
+    }
+
+    List<RestaurantList> formRestaurantList(List<RestaurantEntity> restaurantEntities) throws RestaurantNotFoundException {
+        List<RestaurantList> restaurantList = new ArrayList<>();
+        for (RestaurantEntity r : restaurantEntities) {
+            RestaurantList temp = new RestaurantList();
+            /*
+            Adding categories per address to the restaurant list
+             */
+            StringJoiner tempCategories = new StringJoiner(", ");
+            for (CategoryEntity c : categoryService.getCategoriesByRestaurant(r.getUuid())) {
+                tempCategories.add(c.getCategoryName().toString());
+            }
+            temp.setCategories(tempCategories.toString());
+            /*
+            Adding rest of the attributes for restaurant list
+             */
+            temp.setId(UUID.fromString(r.getUuid()));
+            temp.setRestaurantName(r.getRestaurantName());
+            temp.setAddress(formAddressResponse(r));
+            temp.setAveragePrice(r.getAvgPriceForTwo());
+            temp.setCustomerRating(new BigDecimal(r.getCustomerRating()));
+            temp.setPhotoURL(r.getPhotoUrl());
+            temp.setNumberCustomersRated(r.getNumberOfCustomersRated());
+            restaurantList.add(temp);
+        }
+        return restaurantList;
     }
 }
