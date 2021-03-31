@@ -3,7 +3,6 @@ package com.upgrad.FoodOrderingApp.service.dao;
 import com.upgrad.FoodOrderingApp.service.entity.AddressEntity;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerAuthEntity;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
-import org.graalvm.compiler.core.common.type.ArithmeticOpTable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
