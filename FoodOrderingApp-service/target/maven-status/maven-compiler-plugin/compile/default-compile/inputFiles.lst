@@ -4,9 +4,11 @@ D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\s
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\common\ItemType.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\common\GenericErrorCode.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\entity\AddressEntity.java
+D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\entity\RestaurantItemEntity.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\exception\AuthenticationFailedException.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\entity\StateEntity.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\entity\ItemEntity.java
+D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\entity\RestaurantCategoryEntity.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\exception\CategoryNotFoundException.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\exception\InvalidRatingException.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\ServiceConfiguration.java
@@ -16,6 +18,7 @@ D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\s
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\businness\CategoryService.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\businness\PasswordCryptographyProvider.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\exception\AuthorizationFailedException.java
+D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\businness\CustomerService.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\businness\RestaurantService.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\common\UnexpectedException.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\exception\RestaurantNotFoundException.java
@@ -25,7 +28,11 @@ D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\s
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\businness\ItemService.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\dao\CategoryDao.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\entity\CategoryEntity.java
+D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\dao\CustomerDao.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\dao\RestaurantDao.java
+D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\entity\CategoryItemEntity.java
+D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\entity\CustomerEntity.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\exception\SaveAddressException.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\dao\ItemDao.java
 D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\common\ErrorCode.java
+D:\UPGRAD\Capstone\Backend\FoodOrderingAppBackend-STUB\FoodOrderingApp-service\src\main\java\com\upgrad\FoodOrderingApp\service\entity\CustomerAuthEntity.java

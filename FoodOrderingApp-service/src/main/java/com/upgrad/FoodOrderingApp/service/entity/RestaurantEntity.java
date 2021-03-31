@@ -41,13 +41,29 @@ public class RestaurantEntity implements Serializable {
     private String photoUrl;
 
     @Column(name = "customer_rating")
-    private BigDecimal customerRating;
+    private Double customerRating;
 
     @Column(name = "average_price_for_two")
-    private Integer avgPriceForTwo;
+    private Integer avgPrice;
 
     @Column(name = "number_of_customers_rated")
-    private Integer numberOfCustomersRated;
+    private Integer numberCustomersRated;
+
+    public Integer getAvgPrice() {
+        return avgPrice;
+    }
+
+    public void setAvgPrice(Integer avgPrice) {
+        this.avgPrice = avgPrice;
+    }
+
+    public Integer getNumberCustomersRated() {
+        return numberCustomersRated;
+    }
+
+    public void setNumberCustomersRated(Integer numberCustomersRated) {
+        this.numberCustomersRated = numberCustomersRated;
+    }
 
     @OneToOne
     @NotNull
@@ -62,6 +78,17 @@ public class RestaurantEntity implements Serializable {
     )
     Set<CategoryEntity> categories = new HashSet<>();
 
+    @ManyToMany(mappedBy = "itemsInRestaurant")
+    private Set<ItemEntity> restaurantItems = new HashSet<>();
+
+    public Set<ItemEntity> getRestaurantItems() {
+        return restaurantItems;
+    }
+
+    public void setRestaurantItems(Set<ItemEntity> restaurantItems) {
+        this.restaurantItems = restaurantItems;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -70,8 +97,8 @@ public class RestaurantEntity implements Serializable {
         this.id = id;
     }
 
-    public UUID getUuid() {
-        return UUID.fromString(uuid);
+    public String getUuid() {
+        return uuid;
     }
 
     public void setUuid(String uuid) {
@@ -90,7 +117,7 @@ public class RestaurantEntity implements Serializable {
         return photoUrl;
     }
 
-    public BigDecimal getCustomerRating() {
+    public Double getCustomerRating() {
         return customerRating;
     }
 
@@ -98,25 +125,20 @@ public class RestaurantEntity implements Serializable {
         this.photoUrl = photoUrl;
     }
 
-
-    public void setCustomerRating(BigDecimal customerRating) {
+    public void setCustomerRating(Double customerRating) {
         this.customerRating = customerRating;
     }
 
     public Integer getAvgPriceForTwo() {
-        return avgPriceForTwo;
-    }
-
-    public void setAvgPriceForTwo(Integer avgPriceForTwo) {
-        this.avgPriceForTwo = avgPriceForTwo;
+        return avgPrice;
     }
 
     public Integer getNumberOfCustomersRated() {
-        return numberOfCustomersRated;
+        return numberCustomersRated;
     }
 
     public void setNumberOfCustomersRated(Integer numberOfCustomersRated) {
-        this.numberOfCustomersRated = numberOfCustomersRated;
+        this.numberCustomersRated = numberOfCustomersRated;
     }
 
     public AddressEntity getAddress() {

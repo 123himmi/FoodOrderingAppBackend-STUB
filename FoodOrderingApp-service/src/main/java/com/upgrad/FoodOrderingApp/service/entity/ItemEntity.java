@@ -1,6 +1,8 @@
 package com.upgrad.FoodOrderingApp.service.entity;
 
 import com.upgrad.FoodOrderingApp.service.common.ItemType;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -13,7 +15,8 @@ import java.util.UUID;
 @Entity
 @Table(name = "item")
 @NamedQueries({
-        @NamedQuery(name = "getItem", query = "select i from ItemEntity i where i.uuid = :itemdId")
+        @NamedQuery(name = "getItem", query = "select i from ItemEntity i where i.uuid = :itemdId"),
+        @NamedQuery(name = "getItemsByRestaurant", query = "select i from ItemEntity i")
 })
 
 public class ItemEntity implements Serializable {
@@ -38,15 +41,33 @@ public class ItemEntity implements Serializable {
     @Column(name = "type")
     private String type;
 
-    @ManyToMany(mappedBy = "items")
-    private Set<CategoryEntity> itemCategories = new HashSet<>();
-
-    public Set<CategoryEntity> getItemCategories() {
-        return itemCategories;
+    public Set<CategoryEntity> getRestaurantItems() {
+        return restaurantItems;
     }
 
-    public void setItemCategories(Set<CategoryEntity> itemCategories) {
-        this.itemCategories = itemCategories;
+    public void setRestaurantItems(Set<CategoryEntity> restaurantItems) {
+        this.restaurantItems = restaurantItems;
+    }
+
+    @ManyToMany(mappedBy = "items", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.SELECT)
+    private Set<CategoryEntity> restaurantItems = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @Fetch(FetchMode.SELECT)
+    @JoinTable(
+            name = "restaurant_item",
+            joinColumns = @JoinColumn(name = "item_id"),
+            inverseJoinColumns = @JoinColumn(name = "restaurant_id")
+    )
+    Set<RestaurantEntity> itemsInRestaurant = new HashSet<>();
+
+    public Set<RestaurantEntity> getItemsInRestaurant() {
+        return itemsInRestaurant;
+    }
+
+    public void setItemsInRestaurant(Set<RestaurantEntity> itemsInRestaurant) {
+        this.itemsInRestaurant = itemsInRestaurant;
     }
 
     public Integer getId() {
@@ -57,8 +78,8 @@ public class ItemEntity implements Serializable {
         this.id = id;
     }
 
-    public UUID getUuid() {
-        return UUID.fromString(uuid);
+    public String getUuid() {
+        return uuid;
     }
 
     public void setUuid(String uuid) {

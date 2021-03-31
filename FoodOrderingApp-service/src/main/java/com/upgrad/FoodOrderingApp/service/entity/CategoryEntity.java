@@ -1,19 +1,18 @@
 package com.upgrad.FoodOrderingApp.service.entity;
 
+import com.upgrad.FoodOrderingApp.service.businness.ItemService;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "category")
 @NamedQueries({
         @NamedQuery(name = "getAllCategories", query = "select c from CategoryEntity c order by c.categoryName"),
-        @NamedQuery(name = "getCategoryById", query = "select c from CategoryEntity c where c.uuid=:categoryId")
+        @NamedQuery(name = "getCategoryById", query = "select c from CategoryEntity c JOIN FETCH c.items where c.uuid=:categoryId")
 })
 
 public class CategoryEntity implements Serializable {
@@ -30,14 +29,6 @@ public class CategoryEntity implements Serializable {
     @Size(max = 255)
     private String categoryName;
 
-    @ManyToMany
-    @JoinTable(
-            name = "category_item",
-            joinColumns = @JoinColumn(name = "category_id"),
-            inverseJoinColumns = @JoinColumn(name = "item_id")
-    )
-    private Set<ItemEntity> items = new HashSet<>();
-
     public void setId(Integer id) {
         this.id = id;
     }
@@ -46,8 +37,8 @@ public class CategoryEntity implements Serializable {
         return id;
     }
 
-    public UUID getUuid() {
-        return UUID.fromString(uuid);
+    public String getUuid() {
+        return uuid;
     }
 
     public void setUuid(String uuid) {
@@ -65,16 +56,29 @@ public class CategoryEntity implements Serializable {
     @ManyToMany(mappedBy = "categories")
     Set<RestaurantEntity> restaurantCategories = new HashSet<>();
 
-    public void setItems(Set<ItemEntity> items) {
-        this.items = items;
+    @ManyToMany
+    @JoinTable(
+            name = "category_item",
+            joinColumns = @JoinColumn(name = "category_id"),
+            inverseJoinColumns = @JoinColumn(name = "item_id")
+    )
+    Set<ItemEntity> items = new HashSet<>();
+
+    public List<ItemEntity> getItems() {
+        List<ItemEntity> itemsList = new ArrayList<>();
+        for(ItemEntity i : items) {
+            itemsList.add(i);
+        }
+        return itemsList;
     }
 
     public void setItems(List<ItemEntity> items) {
-        this.items = new HashSet<>(items);
-    }
+        Set<ItemEntity> itemEntitySet = new HashSet<>();
+        for(ItemEntity i : items) {
+            itemEntitySet.add(i);
+        }
 
-    public Set<ItemEntity> getItems() {
-        return items;
+        this.items = itemEntitySet;
     }
 
     public Set<RestaurantEntity> getRestaurantCategories() {
