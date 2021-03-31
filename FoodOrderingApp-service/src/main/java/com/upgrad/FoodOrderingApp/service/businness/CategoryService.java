@@ -28,21 +28,15 @@ public class CategoryService {
         return categoryDao.getAllCategoriesOrderedByName();
     }
 
-    public CategoryEntity getCategoryById(String categoryId) throws CategoryNotFoundException
-    {
-        return categoryDao.getCategoryById(categoryId);
+    public CategoryEntity getCategoryById(String categoryId) throws CategoryNotFoundException {
+        CategoryEntity categoryEntity =  categoryDao.getCategoryById(categoryId);
+        if(categoryEntity == null) {
+            throw new CategoryNotFoundException("CNF-002", "No category by this id");
+        }
+        return categoryEntity;
     }
 
     public List<CategoryEntity> getCategoriesByRestaurant(String restaurantId) throws RestaurantNotFoundException {
         return restaurantService.getCategoriesByRestaurant(restaurantId);
-    }
-
-    public List<ItemEntity> getItemsByCategoryAndRestaurant(String categoryId) {
-         CategoryEntity categoryEntity = categoryDao.getItemsByCategoryAndRestaurant(categoryId);
-         List<ItemEntity> itemEntities = new ArrayList<>();
-        /* for(ItemEntity i : categoryEntity.getItems()) {
-             itemEntities.add(i);
-         }*/
-         return itemEntities;
     }
 }

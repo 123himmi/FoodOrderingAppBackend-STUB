@@ -1,6 +1,8 @@
 package com.upgrad.FoodOrderingApp.service.entity;
 
 import com.upgrad.FoodOrderingApp.service.common.ItemType;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,17 +16,7 @@ import java.util.UUID;
 @Table(name = "item")
 @NamedQueries({
         @NamedQuery(name = "getItem", query = "select i from ItemEntity i where i.uuid = :itemdId"),
-        @NamedQuery(name = "getItemsByCategory", query = "select i from CategoryEntity c " +
-                "JOIN CategoryItemEntity ci ON ci.id = c.id " +
-                "JOIN ItemEntity i ON i.id = ci.itemIdValue " +
-                "WHERE c.uuid = :categoryId"),
-        @NamedQuery(name = "getItemsByRestaurantAndCategory",
-                query = "select i from RestaurantEntity r " +
-                        "JOIN RestaurantCategoryEntity rc ON r.id = rc.restaurantIdValue " +
-                        "JOIN CategoryEntity c ON rc.categoryIdValue = c.id " +
-                        "JOIN CategoryItemEntity ci ON rc.categoryIdValue = ci.categoryIdValue " +
-                        "JOIN ItemEntity i ON ci.itemIdValue = i.id " +
-                        "where r.uuid = :restaurantId AND c.uuid = :categoryId")
+        @NamedQuery(name = "getItemsByRestaurant", query = "select i from ItemEntity i")
 })
 
 public class ItemEntity implements Serializable {
@@ -57,8 +49,26 @@ public class ItemEntity implements Serializable {
         this.restaurantItems = restaurantItems;
     }
 
-    @ManyToMany(mappedBy = "items")
+    @ManyToMany(mappedBy = "items", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.SELECT)
     private Set<CategoryEntity> restaurantItems = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @Fetch(FetchMode.SELECT)
+    @JoinTable(
+            name = "restaurant_item",
+            joinColumns = @JoinColumn(name = "item_id"),
+            inverseJoinColumns = @JoinColumn(name = "restaurant_id")
+    )
+    Set<RestaurantEntity> itemsInRestaurant = new HashSet<>();
+
+    public Set<RestaurantEntity> getItemsInRestaurant() {
+        return itemsInRestaurant;
+    }
+
+    public void setItemsInRestaurant(Set<RestaurantEntity> itemsInRestaurant) {
+        this.itemsInRestaurant = itemsInRestaurant;
+    }
 
     public Integer getId() {
         return id;

@@ -24,11 +24,6 @@ public class RestaurantService {
     @Autowired
     private RestaurantDao restaurantDao;
 
-    public List<RestaurantEntity> getAllRestaurants() {
-
-        return restaurantDao.getAllRestaurants().size() > 0 ? restaurantDao.getAllRestaurants() : null;
-    }
-
     public List<RestaurantEntity> restaurantsByRating() {
         return restaurantDao.getAllRestaurants().size() > 0 ? restaurantDao.getAllRestaurants() : null;
     }

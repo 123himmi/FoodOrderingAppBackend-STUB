@@ -3,8 +3,10 @@ package com.upgrad.FoodOrderingApp.api.controller;
 import com.upgrad.FoodOrderingApp.api.model.*;
 import com.upgrad.FoodOrderingApp.service.businness.CategoryService;
 import com.upgrad.FoodOrderingApp.service.businness.CustomerService;
+import com.upgrad.FoodOrderingApp.service.businness.ItemService;
 import com.upgrad.FoodOrderingApp.service.businness.RestaurantService;
 import com.upgrad.FoodOrderingApp.service.entity.CategoryEntity;
+import com.upgrad.FoodOrderingApp.service.entity.ItemEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
 import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.CategoryNotFoundException;
@@ -33,6 +35,9 @@ public class RestaurantController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private ItemService itemService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/restaurant", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantListResponse> getAllRestaurants() throws RestaurantNotFoundException {
@@ -194,8 +199,7 @@ public class RestaurantController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/restaurant/{restaurant_id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<RestaurantListResponse> getRestaurantByRestaurantId(@PathVariable(name = "restaurant_id") String restaurantId) throws RestaurantNotFoundException
-    {
+    public ResponseEntity<RestaurantDetailsResponse> getRestaurantByRestaurantId(@PathVariable(name = "restaurant_id") String restaurantId) throws RestaurantNotFoundException, CategoryNotFoundException {
 
         if(restaurantId.replace(" ", "").equals("")) {
             throw new RestaurantNotFoundException("RNF-002", "Restaurant id field should not be empty");
@@ -207,8 +211,7 @@ public class RestaurantController {
             throw new RestaurantNotFoundException("RNF-001", "No restaurant by this id");
         }
 
-        List<RestaurantList> restaurantList = new ArrayList<>();
-        RestaurantList temp = new RestaurantList();
+        RestaurantDetailsResponse restaurantDetailsResponse = new RestaurantDetailsResponse();
             /*
             Adding address per restaurant list
              */
@@ -228,28 +231,39 @@ public class RestaurantController {
             /*
             Adding categories per address to the restaurant list
              */
-        StringJoiner tempCategories = new StringJoiner(", ");
-        for (CategoryEntity c : categoryService.getCategoriesByRestaurant(restaurantEntity.getUuid())) {
-            tempCategories.add(c.getCategoryName());
+        List<CategoryList> categoryLists = new ArrayList<>();
+
+        for (CategoryEntity c : categoryService.getCategoriesByRestaurant(restaurantId)) {
+            CategoryList categoryList = new CategoryList();
+            List<ItemList> itemLists = new ArrayList<>();
+            for(ItemEntity i : itemService.getItemsByCategoryAndRestaurant(restaurantId, c.getUuid())) {
+                ItemList itemList = new ItemList();
+                itemList.setItemName(i.getItemName());
+                itemList.setPrice(i.getPrice());
+                Integer enumIndex = (i.getType().trim().equals("") || i.getType().equals('0')) ? 0 : 1;
+                itemList.setItemType(ItemList.ItemTypeEnum.values()[enumIndex]);
+                itemList.setId(UUID.fromString(i.getUuid()));
+                itemLists.add(itemList);
+            }
+            categoryList.setId(UUID.fromString(c.getUuid()));
+            categoryList.setCategoryName(c.getCategoryName());
+            categoryList.setItemList(itemLists);
+            categoryLists.add(categoryList);
         }
-        temp.setCategories(tempCategories.toString());
+        restaurantDetailsResponse.setCategories(categoryLists);
 
             /*
             Adding rest of the attributes for restaurant list
              */
-        temp.setId(UUID.fromString(restaurantEntity.getUuid()));
-        temp.setRestaurantName(restaurantEntity.getRestaurantName());
-        temp.setAddress(tempAddress);
-        temp.setAveragePrice(restaurantEntity.getAvgPriceForTwo());
-        temp.setCustomerRating(new BigDecimal(restaurantEntity.getCustomerRating()));
-        temp.setPhotoURL(restaurantEntity.getPhotoUrl());
-        temp.setNumberCustomersRated(restaurantEntity.getNumberOfCustomersRated());
-        restaurantList.add(temp);
+        restaurantDetailsResponse.setId(UUID.fromString(restaurantEntity.getUuid()));
+        restaurantDetailsResponse.setRestaurantName(restaurantEntity.getRestaurantName());
+        restaurantDetailsResponse.setAddress(tempAddress);
+        restaurantDetailsResponse.setAveragePrice(restaurantEntity.getAvgPriceForTwo());
+        restaurantDetailsResponse.setCustomerRating(new BigDecimal(restaurantEntity.getCustomerRating()));
+        restaurantDetailsResponse.setPhotoURL(restaurantEntity.getPhotoUrl());
+        restaurantDetailsResponse.setNumberCustomersRated(restaurantEntity.getNumberOfCustomersRated());
 
-        RestaurantListResponse restaurantListResponse = new RestaurantListResponse();
-        restaurantListResponse.setRestaurants(restaurantList);
-
-        return new ResponseEntity<>(restaurantListResponse, HttpStatus.OK);
+        return new ResponseEntity<>(restaurantDetailsResponse, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/restaurant/{restaurant_id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

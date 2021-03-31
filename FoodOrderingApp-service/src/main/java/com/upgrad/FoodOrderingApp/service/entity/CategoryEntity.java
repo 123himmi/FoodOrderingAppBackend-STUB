@@ -12,7 +12,7 @@ import java.util.*;
 @Table(name = "category")
 @NamedQueries({
         @NamedQuery(name = "getAllCategories", query = "select c from CategoryEntity c order by c.categoryName"),
-        @NamedQuery(name = "getCategoryById", query = "select c from CategoryEntity c where c.uuid=:categoryId")
+        @NamedQuery(name = "getCategoryById", query = "select c from CategoryEntity c JOIN FETCH c.items where c.uuid=:categoryId")
 })
 
 public class CategoryEntity implements Serializable {

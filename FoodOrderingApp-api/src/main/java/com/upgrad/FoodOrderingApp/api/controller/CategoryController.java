@@ -50,7 +50,7 @@ public class CategoryController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/category/{category_id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<CategoryDetailsResponse> getCategoryById(@PathVariable(name = "category_id") String categoryId) throws CategoryNotFoundException, RestaurantNotFoundException {
+    public ResponseEntity<CategoryDetailsResponse> getCategoryById(@PathVariable(name = "category_id") String categoryId) throws CategoryNotFoundException {
         if(categoryId.replace(" ", "").equals("")) {
             throw new CategoryNotFoundException("CNF-001", "Category id field should not be empty");
         }
@@ -63,7 +63,7 @@ public class CategoryController {
 
         CategoryDetailsResponse categoryDetailsResponse = new CategoryDetailsResponse();
         List<ItemList> itemLists = new ArrayList<>();
-        for(ItemEntity i : itemService.getItemsByCategory(categoryId)) {
+        for(ItemEntity i : categoryEntity.getItems()) {
             ItemList temp = new ItemList();
             temp.setId(UUID.fromString(i.getUuid()));
             Integer tempEnumIndex = i.getType().equals('0') ? 0 : 1;

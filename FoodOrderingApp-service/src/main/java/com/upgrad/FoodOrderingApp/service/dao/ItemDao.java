@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
-import java.util.Map;
 
 @Repository
 
@@ -15,9 +14,20 @@ public class ItemDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public List<String> getTopNItemsForRestaurant(String restaurantId) {
+    public ItemEntity getItem(String itemId) {
+        return entityManager.createQuery("getItem", ItemEntity.class).getSingleResult();
+    }
 
-       return entityManager.createNativeQuery("select i.uuid from item i, restaurant r, orders o, order_item oi, restaurant_item ri " +
+    public List<ItemEntity> getItemsByRestaurant(String restaurantId) {
+            List<ItemEntity> itemRawEntities = entityManager.
+                    createQuery("SELECT i from ItemEntity i JOIN FETCH i.itemsInRestaurant ir WHERE ir.uuid = :restaurantId", ItemEntity.class)
+                    .setParameter("restaurantId", restaurantId).getResultList();
+            return itemRawEntities;
+    }
+
+    public List<String> getItemsIdsByPopularity(String restaurantId) {
+
+        return entityManager.createNativeQuery("select i.uuid from item i, restaurant r, orders o, order_item oi, restaurant_item ri " +
                 " where r.id = o.restaurant_id " +
                 " and o.id = oi.order_id " +
                 " and oi.item_id = i.id " +
@@ -26,23 +36,6 @@ public class ItemDao {
                 " and r.uuid = :restaurantId " +
                 " group by i.uuid order by count(*) desc " +
                 " limit 5").setParameter("restaurantId", restaurantId).getResultList();
-    }
-
-    public ItemEntity getItem(String itemId) {
-        return entityManager.createQuery("getItem", ItemEntity.class).getSingleResult();
-    }
-
-    public List<ItemEntity> getItemsByCategoryAndRestaurant(String restaurantId, String categoryId) {
-        return entityManager.createQuery("getItemsByRestaurantAndCategory", ItemEntity.class)
-                .setParameter("restaurantId", restaurantId)
-                .setParameter("categoryId", categoryId)
-                .getResultList();
-    }
-
-    public List<ItemEntity> getItemsByCategory(String categoryId) {
-        return entityManager.createQuery("getItemsByCategory", ItemEntity.class)
-                .setParameter("categoryId", categoryId)
-                .getResultList();
     }
 }
 

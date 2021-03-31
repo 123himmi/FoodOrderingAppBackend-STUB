@@ -78,6 +78,17 @@ public class RestaurantEntity implements Serializable {
     )
     Set<CategoryEntity> categories = new HashSet<>();
 
+    @ManyToMany(mappedBy = "itemsInRestaurant")
+    private Set<ItemEntity> restaurantItems = new HashSet<>();
+
+    public Set<ItemEntity> getRestaurantItems() {
+        return restaurantItems;
+    }
+
+    public void setRestaurantItems(Set<ItemEntity> restaurantItems) {
+        this.restaurantItems = restaurantItems;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -113,7 +124,6 @@ public class RestaurantEntity implements Serializable {
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
     }
-
 
     public void setCustomerRating(Double customerRating) {
         this.customerRating = customerRating;
