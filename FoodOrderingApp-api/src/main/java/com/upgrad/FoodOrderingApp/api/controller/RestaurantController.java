@@ -114,9 +114,9 @@ public class RestaurantController {
         }
         restaurantDetailsResponse.setCategories(categoryLists);
 
-            /*
-            Adding rest of the attributes for restaurant list
-             */
+          //  Adding rest of the attributes for restaurant list
+
+
         restaurantDetailsResponse.setId(UUID.fromString(restaurantEntity.getUuid()));
         restaurantDetailsResponse.setRestaurantName(restaurantEntity.getRestaurantName());
         restaurantDetailsResponse.setAddress(formAddressResponse(restaurantEntity));
@@ -163,9 +163,9 @@ public class RestaurantController {
         restaurantDetailsResponseAddress.setId(UUID.fromString(restaurantEntity.getAddress().getUuid()));
         restaurantDetailsResponseAddress.setLocality(restaurantEntity.getAddress().getLocality());
         restaurantDetailsResponseAddress.setPincode(restaurantEntity.getAddress().getPincode());
-            /*
-            Adding state per address per restaurant list
-            */
+           // Adding state per address per restaurant list
+
+
         RestaurantDetailsResponseAddressState restaurantDetailsResponseAddressState = new RestaurantDetailsResponseAddressState();
         restaurantDetailsResponseAddressState.setId(UUID.fromString(restaurantEntity.getAddress().getState().getUuid()));
         restaurantDetailsResponseAddressState.setStateName(restaurantEntity.getAddress().getState().getStateName());
@@ -177,17 +177,17 @@ public class RestaurantController {
         List<RestaurantList> restaurantList = new ArrayList<>();
         for (RestaurantEntity r : restaurantEntities) {
             RestaurantList temp = new RestaurantList();
-            /*
-            Adding categories per address to the restaurant list
-             */
+            //Adding categories per address to the restaurant list
+
+
             StringJoiner tempCategories = new StringJoiner(", ");
             for (CategoryEntity c : categoryService.getCategoriesByRestaurant(r.getUuid())) {
                 tempCategories.add(c.getCategoryName().toString());
             }
             temp.setCategories(tempCategories.toString());
-            /*
-            Adding rest of the attributes for restaurant list
-             */
+            //Adding rest of the attributes for restaurant list
+
+
             temp.setId(UUID.fromString(r.getUuid()));
             temp.setRestaurantName(r.getRestaurantName());
             temp.setAddress(formAddressResponse(r));
