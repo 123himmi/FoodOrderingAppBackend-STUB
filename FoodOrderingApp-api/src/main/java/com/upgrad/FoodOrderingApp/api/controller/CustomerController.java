@@ -1,6 +1,5 @@
 package com.upgrad.FoodOrderingApp.api.controller;
 
-
 import com.upgrad.FoodOrderingApp.api.model.*;
 import com.upgrad.FoodOrderingApp.service.businness.CustomerAdminBusinessService;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerAuthEntity;
@@ -28,7 +27,7 @@ public class CustomerController {
     private CustomerAdminBusinessService customerAdminBusinessService;
 
 
-    @RequestMapping(method = RequestMethod.POST, path = "/customer/signup", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(method = RequestMethod.POST,path ="/customer/signup" , consumes = MediaType.APPLICATION_JSON_UTF8_VALUE ,produces =MediaType.APPLICATION_JSON_UTF8_VALUE )
     public ResponseEntity<SignupCustomerResponse> signup(final SignupCustomerRequest signupCustomerRequest)
             throws SignUpRestrictedException {
 
@@ -52,10 +51,9 @@ public class CustomerController {
         return new ResponseEntity<SignupCustomerResponse>(customerResponse, HttpStatus.CREATED);
 
     }
-
     // Login endpoint requests for Basic authentication of the customer and logs in a customer successfully.
-    @RequestMapping(method = RequestMethod.POST, path = "/customer/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<LoginResponse> login(@RequestHeader("authorization") final String authorization)
+    @RequestMapping(method = RequestMethod.POST , path="/customer/login" ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<LoginResponse> login(@RequestHeader("authorization")  final String authorization)
             throws AuthenticationFailedException {
 
 
@@ -77,7 +75,7 @@ public class CustomerController {
         String[] decodedArray = decodedText.split(":");
 
         // Authenticates the username and password and gets the customer auth token
-        CustomerAuthEntity customerAuthToken = customerAdminBusinessService.authenticate(decodedArray[0], decodedArray[1]);
+        CustomerAuthEntity customerAuthToken = customerAdminBusinessService.authenticate(decodedArray[0] , decodedArray[1]);
 
         // Gets the customer details based on auth token
         CustomerEntity customer = customerAuthToken.getCustomer();
@@ -98,12 +96,12 @@ public class CustomerController {
     }
 
     // Logout endpoint requests for Bearer authorization of the customer and logs out the customer successfully.
-    @RequestMapping(method = RequestMethod.POST, path = "/customer/logout", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<LogoutResponse> logout(@RequestHeader("authorization") final String authorization)
+    @RequestMapping(method= RequestMethod.POST, path="/customer/logout", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<LogoutResponse>logout(@RequestHeader("authorization") final String authorization)
             throws AuthorizationFailedException {
 
         // Splits the Bearer authorization text as Bearer and bearerToken
-        String[] bearerToken = authorization.split("Bearer ");
+        String[] bearerToken = authorization.split( "Bearer ");
 
         // Calls the logout method by passing the bearer token
         final CustomerAuthEntity customerAuthTokenEntity = customerAdminBusinessService.logout(bearerToken[1]);
@@ -121,7 +119,7 @@ public class CustomerController {
 
     // Update customer endpoint requests for firstname and lastname of the customer in “UpdateCustomerRequest”
     // and updates the customer details successfully.
-    @RequestMapping(method = RequestMethod.PUT, path = "/customer", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(method = RequestMethod.PUT, path = "/customer",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UpdateCustomerResponse> updateCustomer(final UpdateCustomerRequest customerUpdateRequest,
                                                                  @RequestHeader("authorization") final String authorizaton)
             throws AuthorizationFailedException, UpdateCustomerException {
@@ -152,7 +150,7 @@ public class CustomerController {
 
     // Update customer password endpoint requests for old and new password of the customer in “UpdatePasswordRequest”
     // and updates the customer password successfully.
-    @RequestMapping(method = RequestMethod.PUT, path = "/customer/password", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(method = RequestMethod.PUT, path = "/customer/password",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UpdatePasswordResponse> updateCustomerPassword(final UpdatePasswordRequest customerUpdatePasswordRequest,
                                                                          @RequestHeader("authorization") final String authorizaton)
             throws AuthorizationFailedException, UpdateCustomerException {
