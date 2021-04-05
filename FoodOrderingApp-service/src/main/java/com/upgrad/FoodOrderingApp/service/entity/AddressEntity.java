@@ -1,57 +1,60 @@
 package com.upgrad.FoodOrderingApp.service.entity;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import javax.persistence.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.UUID;
 
 @Entity
-@Table(name="address")
+@Table(name = "address")
+@NamedQueries(
+        {
+                @NamedQuery(name = "addressByUuid", query = "select a from AddressEntity a where a.uuid =:uuid"),
+                @NamedQuery(name = "allAddresses", query = "select a from AddressEntity a "),
+                @NamedQuery(name = "addressById", query = "select a from AddressEntity a where a.id=:id")
+        }
+)
 
 public class AddressEntity implements Serializable {
 
     @Id
-    @Column(name="ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
+    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @Column(name = "uuid")
     @Size(max = 200)
-    @NotNull
-    String uuid;
+    private String uuid;
 
-    @Column(name = "flat_buil_number")
+    @Column(name = "FLAT_BUIL_NUMBER")
     @Size(max = 255)
-    String flatBuildingNumber;
+    private String flatBuildingNumber;
 
-    @Column(name = "locality")
+    @Column(name = "LOCALITY")
     @Size(max = 255)
-    String locality;
+    private String locality;
 
-    @Column(name = "city")
+    @Column(name = "CITY")
     @Size(max = 30)
-    String city;
+    private String city;
 
-    @Column(name = "pincode")
+    @Column(name = "PINCODE")
     @Size(max = 30)
-    String pincode;
+    private String pincode;
 
-    @OneToOne
-    @NotNull
-    @JoinColumn(name = "state_id")
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "STATE_ID")
     private StateEntity state;
 
-    public AddressEntity() {};
-
-    public AddressEntity(String uuid, String flatBuildingNumber, String locality, String city, String pincode, StateEntity state) {
-        this.uuid = uuid;
-        this.flatBuildingNumber = flatBuildingNumber;
-        this.locality = locality;
-        this.city = city;
-        this.pincode = pincode;
-        this.state = state;
-    }
+    @Column(name = "active")
+    private Integer active;
 
     public Integer getId() {
         return id;
@@ -107,5 +110,13 @@ public class AddressEntity implements Serializable {
 
     public void setState(StateEntity state) {
         this.state = state;
+    }
+
+    public Integer getActive() {
+        return active;
+    }
+
+    public void setActive(Integer active) {
+        this.active = active;
     }
 }

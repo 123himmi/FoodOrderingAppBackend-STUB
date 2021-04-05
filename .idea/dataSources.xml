@@ -9,5 +9,11 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5432/restaurantdb</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="restaurantdb@localhost" uuid="1465998e-28f6-487c-b9b2-6d7a8a1ce24e">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/restaurantdb</jdbc-url>
+    </data-source>
   </component>
 </project>
