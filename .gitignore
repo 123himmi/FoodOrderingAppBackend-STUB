@@ -1,0 +1,16 @@
+.idea
+*.iml
+FoodOrderingApp-api/target
+FoodOrderingApp-db/target
+FoodOrderingApp-service/target
+
+
+
+
+
+
+
+
+
+
+
