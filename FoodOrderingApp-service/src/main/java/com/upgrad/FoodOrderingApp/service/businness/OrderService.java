@@ -1,11 +1,11 @@
 package com.upgrad.FoodOrderingApp.service.businness;
 
 
+import com.upgrad.FoodOrderingApp.service.dao.CouponDao;
 import com.upgrad.FoodOrderingApp.service.dao.OrderDao;
 import com.upgrad.FoodOrderingApp.service.entity.CouponEntity;
-import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
-import com.upgrad.FoodOrderingApp.service.entity.OrdersEntity;
-import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
+import com.upgrad.FoodOrderingApp.service.entity.OrderItemEntity;
+import com.upgrad.FoodOrderingApp.service.entity.OrderEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,19 +20,36 @@ public class OrderService {
     private OrderDao orderDao;
 
     @Autowired
+    private CouponDao couponDao;
+
+    @Autowired
     private CustomerAdminBusinessService customerAdminBusinessService;
 
     @Transactional
-    public CouponEntity getCouponByName(String couponName, final String authorizationToken) throws AuthorizationFailedException {
-
-        // Validates the access token retrieved from database
-        customerAdminBusinessService.validateAccessToken(authorizationToken);
+    public CouponEntity getCouponByCouponName(String couponName ) {
         return orderDao.getCouponByName(couponName);
     }
 
     @Transactional
-    public List<OrdersEntity> getCustomerOrders(final CustomerEntity customerEntity) {
+    public List<OrderEntity> getOrdersByCustomers(String uuid) {
 
-        return orderDao.getCustomerOrders(customerEntity);
+        return orderDao.getOrdersByUUID(uuid);
     }
+
+    @Transactional
+    public OrderEntity saveOrder(OrderEntity orderEntity ) {
+        return orderDao.saveOrder(orderEntity);
+    }
+
+    @Transactional
+    public CouponEntity getCouponByCouponId(String couponName ) {
+        return couponDao.getCouponByCouponId(couponName);
+    }
+
+
+    @Transactional
+    public OrderItemEntity saveOrderItem(OrderItemEntity orderItemEntity ) {
+        return orderDao.saveOrder(orderItemEntity);
+    }
+
 }

@@ -1,21 +1,23 @@
 package com.upgrad.FoodOrderingApp.service.businness;
 
 import com.upgrad.FoodOrderingApp.service.dao.ItemDao;
-import com.upgrad.FoodOrderingApp.service.entity.CategoryEntity;
-import com.upgrad.FoodOrderingApp.service.entity.ItemEntity;
-import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
+import com.upgrad.FoodOrderingApp.service.entity.*;
 import com.upgrad.FoodOrderingApp.service.exception.CategoryNotFoundException;
-import com.upgrad.FoodOrderingApp.service.common.ItemType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 
 public class ItemService {
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     private ItemDao itemDao;
@@ -25,6 +27,7 @@ public class ItemService {
 
     @Autowired
     private CategoryService categoryService;
+
 
     public List<ItemEntity> getItemsByPopularity(RestaurantEntity restaurantEntity) {
         List<String> itemIds = itemDao.getItemsIdsByPopularity(restaurantEntity.getUuid());
@@ -56,5 +59,14 @@ public class ItemService {
 
     public List<ItemEntity> getItemsByRestaurant(String restaurantId) {
         return itemDao.getItemsByRestaurant(restaurantId);
+    }
+
+    public List<OrderItemEntity> getItemsByOrder(OrderEntity order) {
+        try {
+            return entityManager.createNamedQuery("itemsByOrder", OrderItemEntity.class).setParameter("order", order)
+                    .getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
     }
 }

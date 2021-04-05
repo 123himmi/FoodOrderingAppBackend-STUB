@@ -4,6 +4,9 @@ FoodOrderingApp-api/target
 FoodOrderingApp-db/target
 FoodOrderingApp-service/target
 
+FoodOrderingApp-db/src/main/resources/config/localhost.properties
+FoodOrderingApp-api/src/main/resources/application.yaml
+
 
 
 

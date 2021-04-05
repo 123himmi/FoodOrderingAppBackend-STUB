@@ -23,4 +23,13 @@ public class PaymentDao {
             return null;
         }
     }
+
+    public PaymentEntity getPaymentByUUID(String paymentId) {
+        try{
+            PaymentEntity paymentEntity = entityManager.createNamedQuery("paymentByUuid",PaymentEntity.class).setParameter("uuid",paymentId).getSingleResult();
+            return paymentEntity;
+        }catch (NoResultException nre){
+            return null;
+        }
+    }
 }
