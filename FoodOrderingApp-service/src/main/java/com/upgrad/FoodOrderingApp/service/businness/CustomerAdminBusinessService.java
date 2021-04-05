@@ -29,7 +29,7 @@ public class CustomerAdminBusinessService {
     }
 
     @Transactional
-    public CustomerEntity signup(CustomerEntity customerEntity) throws SignUpRestrictedException {
+    public CustomerEntity saveCustomer(CustomerEntity customerEntity) throws SignUpRestrictedException {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         Pattern pattern = Pattern.compile(emailRegex);
         if (customerEntity.getFirstName() != null && customerEntity.getEmail() != null && customerEntity.getContactNumber() != null && customerEntity.getPassword() != null) {
@@ -84,10 +84,10 @@ public class CustomerAdminBusinessService {
     }
 
     @Transactional
-    public CustomerEntity updateCustomer(CustomerEntity updatedCustomerEntity, final String authorizationToken) throws AuthorizationFailedException, UpdateCustomerException {
-        CustomerAuthEntity customerAuthTokenEntity = this.customerDao.getCustomerAuthToken(authorizationToken);
-        this.validateAccessToken(authorizationToken);
-        CustomerEntity customerEntity = this.customerDao.getCustomerByUuid(customerAuthTokenEntity.getUuid());
+    public CustomerEntity updateCustomer(CustomerEntity updatedCustomerEntity) throws AuthorizationFailedException, UpdateCustomerException {
+     //   CustomerAuthEntity customerAuthTokenEntity = this.customerDao.getCustomerAuthToken(authorizationToken);
+     //   this.validateAccessToken(authorizationToken);
+        CustomerEntity customerEntity = this.customerDao.getCustomerByUuid(updatedCustomerEntity.getUuid());
         if (updatedCustomerEntity.getFirstName() == null) {
             throw new UpdateCustomerException("UCR-002", "First name field should not be empty");
         } else {
@@ -99,11 +99,11 @@ public class CustomerAdminBusinessService {
     }
 
     @Transactional
-    public CustomerEntity updateCustomerPassword(final String oldPassword, final String newPassword, final String authorizationToken) throws AuthorizationFailedException, UpdateCustomerException {
+    public CustomerEntity updateCustomerPassword(final String oldPassword, final String newPassword, CustomerEntity customerEntityy) throws AuthorizationFailedException, UpdateCustomerException {
         ZonedDateTime now = ZonedDateTime.now();
-        CustomerAuthEntity customerAuthTokenEntity = this.customerDao.getCustomerAuthToken(authorizationToken);
-        this.validateAccessToken(authorizationToken);
-        CustomerEntity customerEntity = this.customerDao.getCustomerByUuid(customerAuthTokenEntity.getUuid());
+        //CustomerAuthEntity customerAuthTokenEntity = this.customerDao.getCustomerAuthToken(authorizationToken);
+        //this.validateAccessToken(authorizationToken);
+        CustomerEntity customerEntity = this.customerDao.getCustomerByUuid(customerEntityy.getUuid());
         if (oldPassword != null && newPassword != null) {
             PasswordCryptographyProvider var10000 = this.cryptographyProvider;
             String encryptedPassword = PasswordCryptographyProvider.encrypt(oldPassword, customerEntity.getSalt());
@@ -151,4 +151,39 @@ public class CustomerAdminBusinessService {
     public CustomerAuthEntity getCustomerAuthToken(final String accessToken) {
         return this.customerDao.getCustomerAuthToken(accessToken);
     }
+
+    @Transactional
+    public CustomerEntity getCustomer (final String accessToken) throws AuthorizationFailedException {
+
+        System.out.println("\n\t ====> CustomerService.getCustomer() called");
+        //get the customerAuthToken details from customerDao
+        CustomerAuthEntity customerAuthTokenEntity = customerDao.getCustomerAuthToken(accessToken);
+
+        // Gets the current time
+        final ZonedDateTime now = ZonedDateTime.now();
+
+        // Throw AuthorizationFailedException if the customer is not authorized
+        if (customerAuthTokenEntity == null) {
+            throw new AuthorizationFailedException("ATHR-001", "Customer is not Logged in.");
+            // Throw AuthorizationFailedException if the customer is logged out
+        } else if (customerAuthTokenEntity.getLogoutAt() != null) {
+            throw new AuthorizationFailedException("ATHR-002", "Customer is logged out. Log in again to access this endpoint.");
+            // Throw AuthorizationFailedException if the customer session is expired
+        } else if (now.isAfter(customerAuthTokenEntity.getExpiresAt())) {
+            throw new AuthorizationFailedException("ATHR-003", "Your session is expired. Log in again to access this endpoint.");
+        }
+        //validateAccessToken(accessToken);
+
+
+
+        CustomerEntity customerEntity = customerDao.getCustomerById(customerDao.getCustomerAuthToken(accessToken).getCustomer().getId());
+        if(customerEntity == null) {
+            throw new AuthorizationFailedException("ATHR-001", "Customer is not Logged in");
+        }
+
+        // CustomerEntity customerEntity = customerDao.searchById(customerAuthEntity.getId());
+        return customerEntity;
+    }
+
+
 }

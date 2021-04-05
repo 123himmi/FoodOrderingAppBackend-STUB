@@ -41,7 +41,7 @@ public class CustomerController {
         customerEntity.setPassword(signupCustomerRequest.getPassword());
 
         // Calls the signup method of customer service with the provided attributes
-        final CustomerEntity createdCustomerEntity = customerAdminBusinessService.signup(customerEntity);
+        final CustomerEntity createdCustomerEntity = customerAdminBusinessService.saveCustomer(customerEntity);
 
         // Loads the SignupCustomerResponse with the uuid of the new customer created and the respective status message
         SignupCustomerResponse customerResponse = new SignupCustomerResponse().id(createdCustomerEntity.getUuid())
@@ -135,7 +135,9 @@ public class CustomerController {
         updatedCustomerEntity.setLastName(customerUpdateRequest.getLastName());
 
         // Calls the updateCustomer method to update the firstname and/or lastname of the customer
-        CustomerEntity customerEntity = customerAdminBusinessService.updateCustomer(updatedCustomerEntity, bearerToken[1]);
+        CustomerEntity getCustomer =customerAdminBusinessService.getCustomer(bearerToken[1]);
+
+        CustomerEntity customerEntity = customerAdminBusinessService.updateCustomer(updatedCustomerEntity);
 
         // Loads the UpdateCustomerResponse with uuid, firstname and lastname of the updated customer
         // and the respective status message
@@ -163,7 +165,9 @@ public class CustomerController {
         String newPassword = customerUpdatePasswordRequest.getNewPassword();
 
         // Calls the updateCustomerPassword method to update the password of the customer
-        CustomerEntity customerEntity = customerAdminBusinessService.updateCustomerPassword(oldPassword, newPassword, bearerToken[1]);
+        CustomerEntity getCustomer =customerAdminBusinessService.getCustomer(bearerToken[1]);
+
+        CustomerEntity customerEntity = customerAdminBusinessService.updateCustomerPassword(oldPassword, newPassword,getCustomer);
 
         // Loads the UpdatePasswordResponse with uuid of the logged in customer
         // and the respective status message
