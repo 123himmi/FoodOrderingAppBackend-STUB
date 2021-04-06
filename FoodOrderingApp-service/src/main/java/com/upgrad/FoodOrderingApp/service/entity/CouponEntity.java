@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
-@Table(name = "coupon")
+@Table(name = "coupon",uniqueConstraints = {@UniqueConstraint(columnNames = {"uuid"})})
 @NamedQueries(
         {
                 @NamedQuery(name = "couponByUuid", query = "select c from CouponEntity c where c.uuid=:uuid"),
@@ -33,6 +33,16 @@ public class CouponEntity implements Serializable {
     @Column(name="PERCENT")
     @NotNull
     private Integer percent;
+
+    public CouponEntity(){
+
+    }
+
+    public CouponEntity(String couponId, String myCoupon, int percent) {
+        this.uuid = couponId;
+        this.couponName = myCoupon;
+        this.percent = percent;
+    }
 
     public long getId() {
         return id;
