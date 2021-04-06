@@ -14,12 +14,12 @@ import java.time.ZonedDateTime;
 @Entity
 @Table(name = "customer_auth")
 @NamedQueries({
-        @NamedQuery(name = "customerAuthTokenByAccessToken", query = "select ct from CustomerAuthEntity ct where ct.accessToken=:accessToken"),
-        @NamedQuery(name = "customerAuthTokenById", query = "select ct from CustomerAuthEntity ct where ct.customer=:customer")
+        @NamedQuery(name = "customerAuthTokenByAccessToken" , query = "select ct from CustomerAuthEntity ct where ct.accessToken=:accessToken"),
+        @NamedQuery(name = "customerAuthTokenById" , query = "select ct from CustomerAuthEntity ct where ct.customer=:customer")
 })
 
 
-public class CustomerAuthEntity implements Serializable {
+public class CustomerAuthEntity  implements Serializable {
 
     @Id
     @Column(name = "ID")

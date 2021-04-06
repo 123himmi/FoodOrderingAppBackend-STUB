@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="restaurantdb@localhost" uuid="ef97b614-e24b-4e15-b103-a0cfa362f84d">
+    <data-source source="LOCAL" name="FoodOrderingApp-api/Hibernate" uuid="b45dbb90-8bb6-44c9-9738-3d2501b3ccb1">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>Hibernate</remarks>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/restaurantdb</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="restaurantdb@localhost" uuid="1465998e-28f6-487c-b9b2-6d7a8a1ce24e">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
