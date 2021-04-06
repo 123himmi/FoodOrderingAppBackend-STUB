@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.xml.ws.Response;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 @RestController
+@CrossOrigin
 @RequestMapping
 
 public class RestaurantController {
@@ -102,7 +104,7 @@ public class RestaurantController {
                 ItemList itemList = new ItemList();
                 itemList.setItemName(i.getItemName());
                 itemList.setPrice(i.getPrice());
-                Integer enumIndex = (i.getType().trim().equals("") || i.getType().equals('0')) ? 0 : 1;
+                Integer enumIndex = (i.getType().trim().equals("") || i.getType().equals("0")) ? 0 : 1;
                 itemList.setItemType(ItemList.ItemTypeEnum.values()[enumIndex]);
                 itemList.setId(UUID.fromString(i.getUuid()));
                 itemLists.add(itemList);
@@ -121,7 +123,7 @@ public class RestaurantController {
         restaurantDetailsResponse.setRestaurantName(restaurantEntity.getRestaurantName());
         restaurantDetailsResponse.setAddress(formAddressResponse(restaurantEntity));
         restaurantDetailsResponse.setAveragePrice(restaurantEntity.getAvgPriceForTwo());
-        restaurantDetailsResponse.setCustomerRating(new BigDecimal(restaurantEntity.getCustomerRating()));
+        restaurantDetailsResponse.setCustomerRating(new BigDecimal(restaurantEntity.getCustomerRating()).setScale(1, RoundingMode.CEILING));
         restaurantDetailsResponse.setPhotoURL(restaurantEntity.getPhotoUrl());
         restaurantDetailsResponse.setNumberCustomersRated(restaurantEntity.getNumberOfCustomersRated());
 
@@ -192,7 +194,7 @@ public class RestaurantController {
             temp.setRestaurantName(r.getRestaurantName());
             temp.setAddress(formAddressResponse(r));
             temp.setAveragePrice(r.getAvgPriceForTwo());
-            temp.setCustomerRating(new BigDecimal(r.getCustomerRating()));
+            temp.setCustomerRating(new BigDecimal(r.getCustomerRating()).setScale(1, RoundingMode.CEILING));
             temp.setPhotoURL(r.getPhotoUrl());
             temp.setNumberCustomersRated(r.getNumberOfCustomersRated());
             restaurantList.add(temp);
